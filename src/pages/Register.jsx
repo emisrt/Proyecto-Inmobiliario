@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import { AlertCircle, IdCard, Lock, Phone, User } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
-import PublicHeader from '../components/PublicHeader'
+import AuthShell from '../components/AuthShell'
 import { useAuth } from '../context/useAuth'
 import { getRoleHome } from '../utils/roles'
 
@@ -37,80 +38,93 @@ function Register() {
   }
 
   return (
-    <>
-      <PublicHeader />
-      <main className="auth-page">
-        <section className="auth-card">
-          <p className="eyebrow">Alta inicial</p>
-          <h1>Registro</h1>
-          <form className="form" onSubmit={handleSubmit}>
-            <label>
-              Nombre completo
-              <input
-                type="text"
-                placeholder="Nombre y apellido"
-                value={fullName}
-                onChange={(event) => setFullName(event.target.value)}
-                required
-              />
-            </label>
-            <label>
-              Email
-              <input
-                type="email"
-                placeholder="usuario@email.com"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                required
-              />
-            </label>
-            <label>
-              Contrasena
-              <input
-                type="password"
-                placeholder="Minimo 6 caracteres"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                required
-                minLength="6"
-              />
-            </label>
-            <label>
-              Telefono
-              <input
-                type="tel"
-                placeholder="Opcional"
-                value={phone}
-                onChange={(event) => setPhone(event.target.value)}
-              />
-            </label>
-            <label>
-              Rol
-              <select
-                value={role}
-                onChange={(event) => setRole(event.target.value)}
-                required
-              >
-                <option value="" disabled>
-                  Seleccionar rol
-                </option>
-                <option value="agente_inmobiliario">Agente inmobiliario</option>
-                <option value="propietario">Propietario</option>
-                <option value="inquilino">Inquilino</option>
-                <option value="profesional">Profesional</option>
-                <option value="visitante">Visitante</option>
-              </select>
-            </label>
-            <button type="submit" disabled={loading}>
-              {loading ? 'Registrando...' : 'Registrar'}
-            </button>
-          </form>
-          {error ? <p className="error-message">{error}</p> : null}
-          {message ? <p className="success-message">{message}</p> : null}
-          <Link to="/login">Ya tengo una cuenta</Link>
-        </section>
-      </main>
-    </>
+    <AuthShell
+      eyebrow="Alta inicial"
+      title="Crear cuenta"
+      description="Registra un usuario de prueba para validar los accesos por rol."
+      footer={<Link to="/login">Ya tengo una cuenta</Link>}
+    >
+      <form className="figma-auth-form" onSubmit={handleSubmit}>
+        <label>
+          <span>
+            <User size={14} />
+            Nombre completo
+          </span>
+          <input
+            type="text"
+            placeholder="Nombre y apellido"
+            value={fullName}
+            onChange={(event) => setFullName(event.target.value)}
+            required
+          />
+        </label>
+        <label>
+          <span>
+            <IdCard size={14} />
+            Email
+          </span>
+          <input
+            type="email"
+            placeholder="usuario@email.com"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            required
+          />
+        </label>
+        <label>
+          <span>
+            <Lock size={14} />
+            Contrasena
+          </span>
+          <input
+            type="password"
+            placeholder="Minimo 6 caracteres"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+            minLength="6"
+          />
+        </label>
+        <label>
+          <span>
+            <Phone size={14} />
+            Telefono
+          </span>
+          <input
+            type="tel"
+            placeholder="Opcional"
+            value={phone}
+            onChange={(event) => setPhone(event.target.value)}
+          />
+        </label>
+        <label>
+          <span>
+            <User size={14} />
+            Rol
+          </span>
+          <select value={role} onChange={(event) => setRole(event.target.value)} required>
+            <option value="" disabled>
+              Seleccionar rol
+            </option>
+            <option value="agente_inmobiliario">Agente inmobiliario</option>
+            <option value="propietario">Propietario</option>
+            <option value="inquilino">Inquilino</option>
+            <option value="profesional">Profesional</option>
+            <option value="visitante">Visitante</option>
+          </select>
+        </label>
+        {error ? (
+          <p className="inline-error">
+            <AlertCircle size={15} />
+            {error}
+          </p>
+        ) : null}
+        {message ? <p className="success-message">{message}</p> : null}
+        <button type="submit" disabled={loading}>
+          {loading ? 'Registrando...' : 'Registrar'}
+        </button>
+      </form>
+    </AuthShell>
   )
 }
 
