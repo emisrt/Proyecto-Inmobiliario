@@ -74,7 +74,7 @@ function Register() {
         <label>
           <span>
             <Lock size={14} />
-            Contrasena
+            Contraseña
           </span>
           <input
             type="password"

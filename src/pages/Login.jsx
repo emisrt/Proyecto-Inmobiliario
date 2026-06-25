@@ -25,7 +25,7 @@ function Login() {
     <AuthShell
       eyebrow="Acceso al sistema"
       title="Iniciar sesion"
-      description="Ingresa con tu correo electronico y contrasena para acceder a Locative."
+      description="Ingresa con tu correo electronico y contraseña para acceder a Locative."
       footer={<Link to="/register">Crear cuenta de prueba</Link>}
     >
       <form className="figma-auth-form" onSubmit={handleSubmit}>
@@ -46,7 +46,7 @@ function Login() {
         <label>
           <span>
             <Lock size={14} />
-            Contrasena
+            Contraseña
           </span>
           <div className="password-field">
             <input
@@ -58,7 +58,7 @@ function Login() {
               required
             />
             <button
-              aria-label={showPassword ? 'Ocultar contrasena' : 'Mostrar contrasena'}
+              aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
               className="ghost-icon-button"
               type="button"
               onClick={() => setShowPassword((value) => !value)}
