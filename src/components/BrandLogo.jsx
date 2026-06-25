@@ -1,10 +1,17 @@
 import { Link } from 'react-router-dom'
 
-function BrandLogo({ to = '/portal', compact = false, className = '' }) {
-  const classes = `brand-logo ${compact ? 'brand-logo-compact' : ''} ${className}`.trim()
+const logoSources = {
+  light: '/locative-logo-light.png',
+  dark: '/locative-logo-dark.png',
+  mono: '/locative-logo-mono.png',
+  mark: '/locative-mark.png',
+}
+
+function BrandLogo({ to = '/portal', compact = false, variant = 'light', className = '' }) {
+  const classes = `brand-logo ${compact ? 'brand-logo-compact' : ''} ${variant === 'mark' ? 'brand-logo-mark' : ''} ${className}`.trim()
   const content = (
     <>
-      <img className="brand-logo-image" src="/locative-logo.png" alt="Locative" />
+      <img className="brand-logo-image" src={logoSources[variant] || logoSources.light} alt="Locative" />
       <span className="brand-logo-fallback">Locative</span>
     </>
   )

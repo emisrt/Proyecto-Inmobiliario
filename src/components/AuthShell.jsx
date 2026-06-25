@@ -5,7 +5,7 @@ function AuthShell({ eyebrow, title, description, children, footer }) {
     <div className="auth-shell">
       <header className="auth-brand-bar">
         <div className="auth-brand-inner">
-          <BrandLogo compact />
+          <BrandLogo compact variant="dark" />
           <p>Gestion inmobiliaria integral</p>
         </div>
       </header>
