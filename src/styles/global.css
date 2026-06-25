@@ -118,6 +118,18 @@ button:disabled {
   font-weight: 600;
 }
 
+.nav-button {
+  background: transparent;
+  color: var(--muted-foreground);
+  font-weight: 700;
+  padding: 0;
+}
+
+.nav-button:hover {
+  background: transparent;
+  color: var(--locative-blue);
+}
+
 .nav a.active {
   color: var(--locative-blue);
 }

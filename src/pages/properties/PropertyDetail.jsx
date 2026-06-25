@@ -91,7 +91,7 @@ function PropertyDetail({ publicView = false }) {
         <PublicHeader />
         <main className="page">
           <section className="page-heading">
-            <p>Portal publico</p>
+            <p>Locative</p>
             <h1>Detalle de propiedad</h1>
           </section>
           {content}

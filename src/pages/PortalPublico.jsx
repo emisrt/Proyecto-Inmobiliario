@@ -44,7 +44,7 @@ function PortalPublico() {
       <PublicHeader />
       <main className="page">
         <section className="page-heading">
-          <p>Portal publico</p>
+          <p>Locative</p>
           <h1>Propiedades disponibles</h1>
         </section>
         <form className="filters" onSubmit={handleSubmit}>

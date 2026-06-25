@@ -7,7 +7,7 @@ function NotFound() {
         <p className="eyebrow">404</p>
         <h1>Pagina no encontrada</h1>
         <p className="muted">La ruta solicitada no existe en este prototipo.</p>
-        <Link to="/portal">Volver al portal publico</Link>
+        <Link to="/portal">Volver a propiedades</Link>
       </section>
     </main>
   )
