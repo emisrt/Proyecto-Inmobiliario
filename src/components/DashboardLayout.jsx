@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import {
   Bell,
   Building2,
@@ -14,26 +14,26 @@ import BrandLogo from './BrandLogo'
 
 const roleNavigation = {
   Inmobiliaria: [
-    { to: '/inmobiliaria', label: 'Inicio', icon: Home },
+    { to: '/inmobiliaria', label: 'Inicio', icon: Home, exact: true },
     { to: '/inmobiliaria/propiedades', label: 'Propiedades', icon: Building2 },
     { to: '/inmobiliaria/arreglos', label: 'Arreglos', icon: Wrench },
-    { to: '/inmobiliaria', label: 'Contratos', icon: FileText },
-    { to: '/inmobiliaria', label: 'Pagos', icon: CreditCard },
+    { to: '/inmobiliaria', match: '/inmobiliaria/contratos', label: 'Contratos', icon: FileText },
+    { to: '/inmobiliaria', match: '/inmobiliaria/pagos', label: 'Pagos', icon: CreditCard },
   ],
   Propietario: [
-    { to: '/propietario', label: 'Inicio', icon: Home },
-    { to: '/propietario', label: 'Mis propiedades', icon: Building2 },
-    { to: '/propietario', label: 'Contratos', icon: FileText },
-    { to: '/propietario', label: 'Cobros', icon: CreditCard },
+    { to: '/propietario', label: 'Inicio', icon: Home, exact: true },
+    { to: '/propietario', match: '/propietario/propiedades', label: 'Mis propiedades', icon: Building2 },
+    { to: '/propietario', match: '/propietario/contratos', label: 'Contratos', icon: FileText },
+    { to: '/propietario', match: '/propietario/cobros', label: 'Cobros', icon: CreditCard },
   ],
   Inquilino: [
-    { to: '/inquilino', label: 'Inicio', icon: Home },
-    { to: '/inquilino', label: 'Mis pagos', icon: CreditCard },
-    { to: '/inquilino', label: 'Mi contrato', icon: FileText },
+    { to: '/inquilino', label: 'Inicio', icon: Home, exact: true },
+    { to: '/inquilino', match: '/inquilino/pagos', label: 'Mis pagos', icon: CreditCard },
+    { to: '/inquilino', match: '/inquilino/contrato', label: 'Mi contrato', icon: FileText },
     { to: '/inquilino/arreglos', label: 'Arreglos', icon: Wrench },
   ],
   'Profesional de arreglos': [
-    { to: '/profesional', label: 'Inicio', icon: Home },
+    { to: '/profesional', label: 'Inicio', icon: Home, exact: true },
     { to: '/profesional/perfil', label: 'Perfil', icon: User },
     { to: '/profesional/arreglos-disponibles', label: 'Disponibles', icon: Wrench },
     { to: '/profesional/postulaciones', label: 'Postulaciones', icon: FileText },
@@ -41,8 +41,19 @@ const roleNavigation = {
   ],
 }
 
+function isNavigationItemActive(item, pathname) {
+  const matchPath = item.match || item.to
+
+  if (item.exact) {
+    return pathname === matchPath
+  }
+
+  return pathname === matchPath || pathname.startsWith(`${matchPath}/`)
+}
+
 function DashboardLayout({ title, role, children }) {
   const { logout, profile } = useAuth()
+  const location = useLocation()
   const navItems = roleNavigation[role] || roleNavigation.Inmobiliaria
 
   return (
@@ -72,9 +83,10 @@ function DashboardLayout({ title, role, children }) {
           <nav>
             {navItems.map((item) => {
               const Icon = item.icon
+              const isActive = isNavigationItemActive(item, location.pathname)
 
               return (
-                <NavLink key={item.label} to={item.to}>
+                <NavLink className={() => (isActive ? 'active' : undefined)} key={item.label} to={item.to}>
                   <Icon size={18} />
                   {item.label}
                 </NavLink>
