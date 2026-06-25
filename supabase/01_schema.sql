@@ -32,13 +32,23 @@ create table if not exists public.properties (
   description text,
   owner_id uuid references public.profiles(id) on delete set null,
   agent_id uuid references public.profiles(id) on delete set null,
+  image_url text,
   created_at timestamp with time zone not null default now(),
   constraint properties_operation_type_check check (operation_type in ('alquiler', 'venta')),
   constraint properties_property_type_check check (
     property_type in ('casa', 'departamento', 'local', 'terreno', 'oficina')
   ),
   constraint properties_status_check check (
-    status in ('registrada', 'disponible', 'alquilada', 'vendida', 'suspendida')
+    status in (
+      'registrada',
+      'disponible',
+      'disponible_alquiler',
+      'disponible_venta',
+      'alquilada',
+      'vendida',
+      'suspendida',
+      'anulada'
+    )
   ),
   constraint properties_price_check check (price >= 0)
 );
@@ -94,7 +104,17 @@ create table if not exists public.repair_requests (
   created_at timestamp with time zone not null default now(),
   constraint repair_requests_priority_check check (priority in ('baja', 'media', 'alta', 'urgente')),
   constraint repair_requests_status_check check (
-    status in ('pendiente', 'publicada', 'en_proceso', 'resuelta', 'cancelada')
+    status in (
+      'pendiente',
+      'publicada',
+      'publicado',
+      'en_proceso',
+      'pendiente_confirmacion',
+      'resuelta',
+      'resuelto',
+      'cancelada',
+      'cancelado'
+    )
   )
 );
 

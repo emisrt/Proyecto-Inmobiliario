@@ -33,7 +33,8 @@ a:hover {
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
 }
 
@@ -365,12 +366,67 @@ h2 {
 
 .form input,
 .form select,
+.form textarea,
 .filters input,
 .filters select {
   border: 1px solid #cbd5e1;
   border-radius: var(--radius-md);
   min-height: 44px;
   padding: 0.75rem;
+}
+
+.form textarea {
+  resize: vertical;
+}
+
+.two-column-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.full-row {
+  grid-column: 1 / -1;
+}
+
+.compact-form {
+  align-content: start;
+  margin: 0;
+}
+
+.form-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.button-link,
+.secondary-button {
+  align-items: center;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  font-weight: 800;
+  min-height: 42px;
+  padding: 0.65rem 0.9rem;
+}
+
+.button-link {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.button-link:hover {
+  background: var(--locative-navy);
+  color: var(--primary-foreground);
+  text-decoration: none;
+}
+
+.secondary-button {
+  background: #eef2f7;
+  color: #334155;
+}
+
+.secondary-button:hover {
+  background: #e2e8f0;
 }
 
 .filters {
@@ -393,6 +449,57 @@ h2 {
 .panel,
 .stat-card {
   padding: 1rem;
+}
+
+.property-card-image,
+.detail-image {
+  background: #eef2f7;
+  border-radius: var(--radius-md);
+  display: block;
+  object-fit: cover;
+  width: 100%;
+}
+
+.property-card-image {
+  aspect-ratio: 16 / 10;
+  margin-bottom: 1rem;
+}
+
+.detail-image {
+  max-height: 360px;
+}
+
+.detail-layout {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+}
+
+.detail-price {
+  display: block;
+  font-size: 1.6rem;
+  margin: 0.75rem 0;
+}
+
+.detail-list {
+  display: grid;
+  gap: 0.6rem;
+  margin: 1rem 0;
+}
+
+.detail-list div {
+  display: grid;
+  gap: 0.25rem;
+  grid-template-columns: 150px 1fr;
+}
+
+.detail-list dt {
+  color: #64748b;
+  font-weight: 800;
+}
+
+.detail-list dd {
+  margin: 0;
 }
 
 .stat-card {
@@ -783,6 +890,21 @@ h2 {
   text-transform: uppercase;
 }
 
+.table-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.table-actions button,
+.table-actions a {
+  font-size: 0.82rem;
+  font-weight: 800;
+  min-height: 34px;
+  padding: 0.4rem 0.6rem;
+}
+
 .status-badge {
   background: #e2e8f0;
   border-radius: 999px;
@@ -798,8 +920,11 @@ h2 {
 .status-activo,
 .status-abonado,
 .status-disponible,
+.status-disponible_alquiler,
+.status-disponible_venta,
 .status-aceptada,
 .status-resuelta,
+.status-resuelto,
 .status-baja {
   background: #dcfce7;
   color: #166534;
@@ -807,6 +932,8 @@ h2 {
 
 .status-pendiente,
 .status-publicada,
+.status-publicado,
+.status-registrada,
 .status-media {
   background: #fef3c7;
   color: #92400e;
@@ -814,14 +941,19 @@ h2 {
 
 .status-vencido,
 .status-urgente,
-.status-rechazada {
+.status-rechazada,
+.status-cancelada,
+.status-cancelado,
+.status-anulada {
   background: #fee2e2;
   color: #991b1b;
 }
 
 .status-en_proceso,
+.status-pendiente_confirmacion,
 .status-abonado_con_recargo,
-.status-alta {
+.status-alta,
+.status-suspendida {
   background: #dbeafe;
   color: #1e40af;
 }
@@ -881,6 +1013,12 @@ h2 {
   }
 
   .filters {
+    grid-template-columns: 1fr;
+  }
+
+  .two-column-form,
+  .detail-layout,
+  .detail-list div {
     grid-template-columns: 1fr;
   }
 

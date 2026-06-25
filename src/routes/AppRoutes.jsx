@@ -8,6 +8,19 @@ import NotFound from '../pages/NotFound'
 import PortalPublico from '../pages/PortalPublico'
 import Register from '../pages/Register'
 import Unauthorized from '../pages/Unauthorized'
+import AssignedJobs from '../pages/professional/AssignedJobs'
+import AvailableRepairDetail from '../pages/professional/AvailableRepairDetail'
+import AvailableRepairs from '../pages/professional/AvailableRepairs'
+import ProfessionalApplications from '../pages/professional/ProfessionalApplications'
+import ProfessionalProfile from '../pages/professional/ProfessionalProfile'
+import PropertyDetail from '../pages/properties/PropertyDetail'
+import PropertyForm from '../pages/properties/PropertyForm'
+import PropertyList from '../pages/properties/PropertyList'
+import AgentRepairList from '../pages/repairs/AgentRepairList'
+import RepairApplications from '../pages/repairs/RepairApplications'
+import RepairDetail from '../pages/repairs/RepairDetail'
+import RepairForm from '../pages/repairs/RepairForm'
+import TenantRepairList from '../pages/repairs/TenantRepairList'
 import RoleProtectedRoute from './RoleProtectedRoute'
 
 function AppRoutes() {
@@ -15,6 +28,7 @@ function AppRoutes() {
     <Routes>
       <Route path="/" element={<Navigate to="/portal" replace />} />
       <Route path="/portal" element={<PortalPublico />} />
+      <Route path="/portal/propiedades/:id" element={<PropertyDetail publicView />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
@@ -27,6 +41,62 @@ function AppRoutes() {
         }
       />
       <Route
+        path="/inmobiliaria/propiedades"
+        element={
+          <RoleProtectedRoute allowedRoles={['agente_inmobiliario']}>
+            <PropertyList />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/inmobiliaria/propiedades/nueva"
+        element={
+          <RoleProtectedRoute allowedRoles={['agente_inmobiliario']}>
+            <PropertyForm />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/inmobiliaria/propiedades/:id"
+        element={
+          <RoleProtectedRoute allowedRoles={['agente_inmobiliario']}>
+            <PropertyDetail />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/inmobiliaria/propiedades/:id/editar"
+        element={
+          <RoleProtectedRoute allowedRoles={['agente_inmobiliario']}>
+            <PropertyForm />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/inmobiliaria/arreglos"
+        element={
+          <RoleProtectedRoute allowedRoles={['agente_inmobiliario']}>
+            <AgentRepairList />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/inmobiliaria/arreglos/:id"
+        element={
+          <RoleProtectedRoute allowedRoles={['agente_inmobiliario']}>
+            <RepairDetail mode="agent" />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/inmobiliaria/arreglos/:id/postulaciones"
+        element={
+          <RoleProtectedRoute allowedRoles={['agente_inmobiliario']}>
+            <RepairApplications />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
         path="/inquilino"
         element={
           <RoleProtectedRoute allowedRoles={['inquilino']}>
@@ -35,10 +105,74 @@ function AppRoutes() {
         }
       />
       <Route
+        path="/inquilino/arreglos"
+        element={
+          <RoleProtectedRoute allowedRoles={['inquilino']}>
+            <TenantRepairList />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/inquilino/arreglos/nuevo"
+        element={
+          <RoleProtectedRoute allowedRoles={['inquilino']}>
+            <RepairForm />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/inquilino/arreglos/:id"
+        element={
+          <RoleProtectedRoute allowedRoles={['inquilino']}>
+            <RepairDetail mode="tenant" />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
         path="/profesional"
         element={
           <RoleProtectedRoute allowedRoles={['profesional']}>
             <DashboardProfesional />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/profesional/perfil"
+        element={
+          <RoleProtectedRoute allowedRoles={['profesional']}>
+            <ProfessionalProfile />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/profesional/arreglos-disponibles"
+        element={
+          <RoleProtectedRoute allowedRoles={['profesional']}>
+            <AvailableRepairs />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/profesional/arreglos-disponibles/:id"
+        element={
+          <RoleProtectedRoute allowedRoles={['profesional']}>
+            <AvailableRepairDetail />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/profesional/postulaciones"
+        element={
+          <RoleProtectedRoute allowedRoles={['profesional']}>
+            <ProfessionalApplications />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/profesional/trabajos-asignados"
+        element={
+          <RoleProtectedRoute allowedRoles={['profesional']}>
+            <AssignedJobs />
           </RoleProtectedRoute>
         }
       />

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import DashboardLayout from '../components/DashboardLayout'
 import StatCard from '../components/StatCard'
 import { supabase } from '../services/supabaseClient'
@@ -62,7 +63,7 @@ function DashboardInmobiliaria() {
           countRows('payments', (query) => query.eq('status', 'pendiente')),
           countRows('payments', (query) => query.eq('status', 'vencido')),
           countRows('repair_requests', (query) => query.eq('status', 'pendiente')),
-          countRows('repair_requests', (query) => query.eq('status', 'publicada')),
+          countRows('repair_requests', (query) => query.in('status', ['publicada', 'publicado'])),
           countRows('job_applications', (query) => query.eq('status', 'pendiente')),
           countRows('repair_requests', (query) => query.eq('status', 'en_proceso')),
         ])
@@ -107,6 +108,15 @@ function DashboardInmobiliaria() {
         <StatCard label="Arreglos publicados" value={stats.publishedRepairs} />
         <StatCard label="Postulaciones pendientes" value={stats.pendingApplications} />
         <StatCard label="Trabajos en proceso" value={stats.jobsInProgress} />
+      </section>
+      <section className="panel dashboard-section">
+        <div className="section-header">
+          <h2>Accesos rapidos</h2>
+          <div className="form-actions">
+            <Link className="button-link" to="/inmobiliaria/propiedades">Gestionar propiedades</Link>
+            <Link className="button-link" to="/inmobiliaria/arreglos">Gestionar arreglos</Link>
+          </div>
+        </div>
       </section>
     </DashboardLayout>
   )

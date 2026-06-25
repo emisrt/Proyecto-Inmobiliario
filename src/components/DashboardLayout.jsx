@@ -15,7 +15,8 @@ import BrandLogo from './BrandLogo'
 const roleNavigation = {
   Inmobiliaria: [
     { to: '/inmobiliaria', label: 'Inicio', icon: Home },
-    { to: '/portal', label: 'Propiedades', icon: Building2 },
+    { to: '/inmobiliaria/propiedades', label: 'Propiedades', icon: Building2 },
+    { to: '/inmobiliaria/arreglos', label: 'Arreglos', icon: Wrench },
     { to: '/inmobiliaria', label: 'Contratos', icon: FileText },
     { to: '/inmobiliaria', label: 'Pagos', icon: CreditCard },
   ],
@@ -29,11 +30,14 @@ const roleNavigation = {
     { to: '/inquilino', label: 'Inicio', icon: Home },
     { to: '/inquilino', label: 'Mis pagos', icon: CreditCard },
     { to: '/inquilino', label: 'Mi contrato', icon: FileText },
-    { to: '/inquilino', label: 'Reclamos', icon: Wrench },
+    { to: '/inquilino/arreglos', label: 'Arreglos', icon: Wrench },
   ],
   'Profesional de arreglos': [
-    { to: '/profesional', label: 'Trabajos', icon: Wrench },
-    { to: '/profesional', label: 'Postulaciones', icon: FileText },
+    { to: '/profesional', label: 'Inicio', icon: Home },
+    { to: '/profesional/perfil', label: 'Perfil', icon: User },
+    { to: '/profesional/arreglos-disponibles', label: 'Disponibles', icon: Wrench },
+    { to: '/profesional/postulaciones', label: 'Postulaciones', icon: FileText },
+    { to: '/profesional/trabajos-asignados', label: 'Asignados', icon: Building2 },
   ],
 }
 

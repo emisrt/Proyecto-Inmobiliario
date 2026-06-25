@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import DashboardLayout from '../components/DashboardLayout'
 import SimpleTable from '../components/SimpleTable'
 import StatCard from '../components/StatCard'
@@ -57,7 +58,7 @@ function DashboardProfesional() {
           supabase
             .from('repair_requests')
             .select('*')
-            .eq('status', 'publicada')
+            .in('status', ['publicada', 'publicado'])
             .order('created_at', { ascending: false })
             .limit(5),
           supabase
@@ -108,7 +109,7 @@ function DashboardProfesional() {
         <StatCard
           label="Especialidad"
           value={professionalProfile?.specialty || 'Sin perfil'}
-          hint={professionalProfile?.work_zone}
+          hint={professionalProfile?.availability || professionalProfile?.work_zone}
         />
         <StatCard label="Trabajos disponibles" value={availableJobs.length} />
         <StatCard label="Postulaciones realizadas" value={applications.length} />
@@ -118,7 +119,7 @@ function DashboardProfesional() {
       <section className="panel dashboard-section">
         <div className="section-header">
           <h2>Ultimos arreglos publicados</h2>
-          <button type="button">Ver arreglos disponibles</button>
+          <Link className="button-link" to="/profesional/arreglos-disponibles">Ver arreglos disponibles</Link>
         </div>
         <SimpleTable
           columns={repairColumns}

@@ -84,7 +84,7 @@ on public.properties
 for select
 to anon, authenticated
 using (
-  status = 'disponible'
+  status in ('disponible', 'disponible_alquiler', 'disponible_venta')
   or public.is_agent()
   or owner_id = auth.uid()
   or exists (
@@ -184,7 +184,7 @@ using (
   or assigned_professional_id = auth.uid()
   or (
     public.current_user_role() = 'profesional'
-    and status = 'publicada'
+    and status in ('publicada', 'publicado')
   )
 );
 
@@ -251,7 +251,7 @@ with check (
     select 1
     from public.repair_requests rr
     where rr.id = job_applications.repair_request_id
-      and rr.status = 'publicada'
+      and rr.status in ('publicada', 'publicado')
   )
 );
 
@@ -279,7 +279,7 @@ using (
     from public.properties p
     where p.id = property_images.property_id
       and (
-        p.status = 'disponible'
+        p.status in ('disponible', 'disponible_alquiler', 'disponible_venta')
         or public.is_agent()
         or p.owner_id = auth.uid()
         or exists (

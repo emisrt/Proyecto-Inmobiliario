@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import DashboardLayout from '../components/DashboardLayout'
 import SimpleTable from '../components/SimpleTable'
 import StatCard from '../components/StatCard'
@@ -125,7 +126,7 @@ function DashboardInquilino() {
       <section className="panel dashboard-section">
         <div className="section-header">
           <h2>Ultimas solicitudes de arreglo</h2>
-          <button type="button">Solicitar arreglo</button>
+          <Link className="button-link" to="/inquilino/arreglos/nuevo">Solicitar arreglo</Link>
         </div>
         <SimpleTable
           columns={repairColumns}
