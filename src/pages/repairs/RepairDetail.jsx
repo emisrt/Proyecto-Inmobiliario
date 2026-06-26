@@ -90,11 +90,11 @@ function RepairDetail({ mode = 'tenant' }) {
                   Estado
                   <select name="status" value={form.status} onChange={handleChange}>
                     <option value="pendiente">Pendiente</option>
-                    <option value="publicada">Publicado</option>
+                    <option value="publicado">Publicado</option>
                     <option value="en_proceso">En proceso</option>
                     <option value="pendiente_confirmacion">Pendiente confirmacion</option>
-                    <option value="resuelta">Resuelto</option>
-                    <option value="cancelada">Cancelado</option>
+                    <option value="resuelto">Resuelto</option>
+                    <option value="cancelado">Cancelado</option>
                   </select>
                 </label>
                 <label>

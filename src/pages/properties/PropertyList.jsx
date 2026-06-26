@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { MoreVertical } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../components/DashboardLayout'
-import SimpleTable from '../../components/SimpleTable'
 import StatusBadge from '../../components/StatusBadge'
-import { listProperties, updatePropertyStatus } from '../../services/propertyService'
+import { listProperties } from '../../services/propertyService'
 import { formatCurrency } from '../../utils/formatters'
 
 function PropertyList() {
+  const navigate = useNavigate()
   const [properties, setProperties] = useState([])
+  const [openMenuId, setOpenMenuId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [success, setSuccess] = useState(null)
 
   async function loadProperties() {
     setLoading(true)
@@ -30,46 +31,6 @@ function PropertyList() {
     loadProperties()
   }, [])
 
-  async function changeStatus(id, status) {
-    setError(null)
-    setSuccess(null)
-
-    try {
-      await updatePropertyStatus(id, status)
-      setSuccess('Estado de propiedad actualizado.')
-      await loadProperties()
-    } catch (statusError) {
-      setError(statusError.message)
-    }
-  }
-
-  const columns = [
-    { header: 'Propiedad', accessor: 'title' },
-    { header: 'Direccion', key: 'address', render: (property) => `${property.address}${property.city ? `, ${property.city}` : ''}` },
-    { header: 'Operacion', accessor: 'operation_type' },
-    { header: 'Precio', key: 'price', render: (property) => formatCurrency(property.price) },
-    { header: 'Estado', key: 'status', render: (property) => <StatusBadge status={property.status} /> },
-    {
-      header: 'Acciones',
-      key: 'actions',
-      render: (property) => (
-        <div className="table-actions">
-          <Link to={`/inmobiliaria/propiedades/${property.id}`}>Ver</Link>
-          <Link to={`/inmobiliaria/propiedades/${property.id}/editar`}>Editar</Link>
-          <button type="button" onClick={() => changeStatus(property.id, 'suspendida')}>
-            Suspender
-          </button>
-          <button type="button" onClick={() => changeStatus(property.id, 'disponible')}>
-            Reactivar
-          </button>
-          <button type="button" onClick={() => changeStatus(property.id, 'anulada')}>
-            Anular
-          </button>
-        </div>
-      ),
-    },
-  ]
-
   return (
     <DashboardLayout title="Propiedades" role="Inmobiliaria">
       <section className="panel dashboard-section">
@@ -81,8 +42,65 @@ function PropertyList() {
         </div>
         {loading ? <p className="muted">Cargando propiedades...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}
-        {success ? <p className="success-message">{success}</p> : null}
-        <SimpleTable columns={columns} rows={properties} emptyMessage="No hay propiedades registradas." />
+        <div className="table-wrapper">
+          <table className="simple-table interactive-table">
+            <thead>
+              <tr>
+                <th>Propiedad</th>
+                <th>Direccion</th>
+                <th>Operacion</th>
+                <th>Precio</th>
+                <th>Estado</th>
+                <th aria-label="Acciones" />
+              </tr>
+            </thead>
+            <tbody>
+              {properties.length === 0 ? (
+                <tr>
+                  <td colSpan="6">No hay propiedades registradas.</td>
+                </tr>
+              ) : (
+                properties.map((property) => (
+                  <tr
+                    className="clickable-row"
+                    key={property.id}
+                    onClick={() => navigate(`/inmobiliaria/propiedades/${property.id}`)}
+                    tabIndex="0"
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault()
+                        navigate(`/inmobiliaria/propiedades/${property.id}`)
+                      }
+                    }}
+                  >
+                    <td>{property.title}</td>
+                    <td>{property.address}{property.city ? `, ${property.city}` : ''}</td>
+                    <td>{property.operation_type}</td>
+                    <td>{formatCurrency(property.price)}</td>
+                    <td><StatusBadge status={property.status} /></td>
+                    <td className="row-menu-cell" onClick={(event) => event.stopPropagation()}>
+                      <div className="context-menu">
+                        <button
+                          aria-label={`Opciones de ${property.title}`}
+                          className="icon-button"
+                          type="button"
+                          onClick={() => setOpenMenuId((currentId) => (currentId === property.id ? null : property.id))}
+                        >
+                          <MoreVertical size={17} />
+                        </button>
+                        {openMenuId === property.id ? (
+                          <div className="context-menu-panel">
+                            <Link to={`/inmobiliaria/propiedades/${property.id}/editar`}>Editar propiedad</Link>
+                          </div>
+                        ) : null}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </section>
     </DashboardLayout>
   )

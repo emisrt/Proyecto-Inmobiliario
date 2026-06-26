@@ -17,6 +17,7 @@ import AssignTenant from '../pages/properties/AssignTenant'
 import PropertyDetail from '../pages/properties/PropertyDetail'
 import PropertyForm from '../pages/properties/PropertyForm'
 import PropertyList from '../pages/properties/PropertyList'
+import AgentRepairForm from '../pages/repairs/AgentRepairForm'
 import AgentRepairList from '../pages/repairs/AgentRepairList'
 import RepairApplications from '../pages/repairs/RepairApplications'
 import RepairDetail from '../pages/repairs/RepairDetail'
@@ -86,6 +87,14 @@ function AppRoutes() {
         element={
           <RoleProtectedRoute allowedRoles={['agente_inmobiliario']}>
             <AgentRepairList />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/inmobiliaria/arreglos/nuevo"
+        element={
+          <RoleProtectedRoute allowedRoles={['agente_inmobiliario']}>
+            <AgentRepairForm />
           </RoleProtectedRoute>
         }
       />

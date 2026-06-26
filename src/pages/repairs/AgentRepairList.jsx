@@ -3,14 +3,23 @@ import { Link } from 'react-router-dom'
 import DashboardLayout from '../../components/DashboardLayout'
 import SimpleTable from '../../components/SimpleTable'
 import StatusBadge from '../../components/StatusBadge'
-import { listAgentRepairs } from '../../services/repairService'
+import { listAgentRepairs, updateRepairStatus } from '../../services/repairService'
 import { formatDate } from '../../utils/formatters'
+
+function normalizeRepairStatus(status) {
+  if (status === 'publicada') return 'publicado'
+  if (status === 'resuelta') return 'resuelto'
+  if (status === 'cancelada') return 'cancelado'
+  return status
+}
 
 function AgentRepairList() {
   const [status, setStatus] = useState('')
   const [repairs, setRepairs] = useState([])
   const [loading, setLoading] = useState(true)
+  const [savingId, setSavingId] = useState(null)
   const [error, setError] = useState(null)
+  const [success, setSuccess] = useState(null)
 
   async function loadRepairs(nextStatus = status) {
     setLoading(true)
@@ -36,23 +45,102 @@ function AgentRepairList() {
     loadRepairs(nextStatus)
   }
 
-  const columns = [
-    { header: 'Solicitud', accessor: 'title' },
-    { header: 'Propiedad', key: 'property', render: (repair) => repair.properties?.title || '-' },
-    { header: 'Inquilino', key: 'tenant', render: (repair) => repair.tenant?.full_name || '-' },
-    { header: 'Prioridad', key: 'priority', render: (repair) => <StatusBadge status={repair.priority} /> },
-    { header: 'Estado', key: 'status', render: (repair) => <StatusBadge status={repair.status} /> },
-    { header: 'Fecha', key: 'created_at', render: (repair) => formatDate(repair.created_at?.slice(0, 10)) },
-    {
-      header: 'Acciones',
-      key: 'actions',
-      render: (repair) => (
+  async function changeRepairStatus(repair, nextStatus) {
+    setSavingId(repair.id)
+    setError(null)
+    setSuccess(null)
+
+    try {
+      await updateRepairStatus(repair.id, nextStatus)
+      setSuccess('Estado de solicitud actualizado.')
+      await loadRepairs()
+    } catch (statusError) {
+      setError(statusError.message)
+    } finally {
+      setSavingId(null)
+    }
+  }
+
+  function renderRepairActions(repair) {
+    const currentStatus = normalizeRepairStatus(repair.status)
+
+    if (currentStatus === 'pendiente') {
+      return (
         <div className="table-actions">
+          <button type="button" disabled={savingId === repair.id} onClick={() => changeRepairStatus(repair, 'publicado')}>
+            Publicar
+          </button>
           <Link to={`/inmobiliaria/arreglos/${repair.id}`}>Gestionar</Link>
-          <Link to={`/inmobiliaria/arreglos/${repair.id}/postulaciones`}>Postulaciones</Link>
+        </div>
+      )
+    }
+
+    if (currentStatus === 'publicado') {
+      return (
+        <div className="table-actions">
+          <Link to={`/inmobiliaria/arreglos/${repair.id}/postulaciones`}>Ver postulaciones</Link>
+          <Link to={`/inmobiliaria/arreglos/${repair.id}`}>Gestionar</Link>
+        </div>
+      )
+    }
+
+    if (currentStatus === 'en_proceso') {
+      return (
+        <div className="table-actions">
+          <button type="button" disabled={savingId === repair.id} onClick={() => changeRepairStatus(repair, 'pendiente_confirmacion')}>
+            Pendiente confirmación
+          </button>
+          <button type="button" disabled={savingId === repair.id} onClick={() => changeRepairStatus(repair, 'resuelto')}>
+            Resolver
+          </button>
+        </div>
+      )
+    }
+
+    if (currentStatus === 'pendiente_confirmacion') {
+      return (
+        <div className="table-actions">
+          <button type="button" disabled={savingId === repair.id} onClick={() => changeRepairStatus(repair, 'resuelto')}>
+            Confirmar resuelto
+          </button>
+          <Link to={`/inmobiliaria/arreglos/${repair.id}`}>Gestionar</Link>
+        </div>
+      )
+    }
+
+    return <span className="muted">Sin acciones</span>
+  }
+
+  const columns = [
+    {
+      header: 'Solicitud',
+      key: 'summary',
+      render: (repair) => (
+        <div className="table-main-copy">
+          <strong>{repair.title}</strong>
+          <span>{repair.description || 'Sin descripción cargada.'}</span>
         </div>
       ),
     },
+    {
+      header: 'Propiedad',
+      key: 'property',
+      render: (repair) => (
+        <div className="table-main-copy">
+          <strong>{repair.properties?.address || repair.properties?.title || '-'}</strong>
+          <span>{[repair.properties?.title, repair.properties?.city].filter(Boolean).join(' · ')}</span>
+        </div>
+      ),
+    },
+    {
+      header: 'Profesional',
+      key: 'professional',
+      render: (repair) => repair.assigned_professional?.full_name || <span className="muted">Sin asignar</span>,
+    },
+    { header: 'Prioridad', key: 'priority', render: (repair) => <StatusBadge status={repair.priority} /> },
+    { header: 'Estado', key: 'status', render: (repair) => <StatusBadge status={normalizeRepairStatus(repair.status)} /> },
+    { header: 'Fecha generación', key: 'created_at', render: (repair) => formatDate(repair.created_at?.slice(0, 10)) },
+    { header: 'Acciones', key: 'actions', render: renderRepairActions },
   ]
 
   return (
@@ -60,17 +148,24 @@ function AgentRepairList() {
       <section className="panel dashboard-section">
         <div className="section-header">
           <h2>Arreglos</h2>
-          <select value={status} onChange={handleStatusChange}>
-            <option value="">Todos los estados</option>
-            <option value="pendiente">Pendiente</option>
-            <option value="publicada">Publicado</option>
-            <option value="en_proceso">En proceso</option>
-            <option value="resuelta">Resuelto</option>
-            <option value="cancelada">Cancelado</option>
-          </select>
+          <div className="section-actions">
+            <Link className="button-link" to="/inmobiliaria/arreglos/nuevo">
+              Nueva solicitud
+            </Link>
+            <select value={status} onChange={handleStatusChange}>
+              <option value="">Todos los estados</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="publicado">Publicado</option>
+              <option value="en_proceso">En proceso</option>
+              <option value="pendiente_confirmacion">Pendiente confirmación</option>
+              <option value="resuelto">Resuelto</option>
+              <option value="cancelado">Cancelado</option>
+            </select>
+          </div>
         </div>
         {loading ? <p className="muted">Cargando arreglos...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}
+        {success ? <p className="success-message">{success}</p> : null}
         <SimpleTable columns={columns} rows={repairs} emptyMessage="No hay solicitudes de arreglo." />
       </section>
     </DashboardLayout>
