@@ -2,10 +2,13 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import PublicHeader from '../components/PublicHeader'
 import StatusBadge from '../components/StatusBadge'
+import { useAuth } from '../context/useAuth'
 import { listPublicProperties } from '../services/propertyService'
 import { formatCurrency } from '../utils/formatters'
+import { getRoleHome } from '../utils/roles'
 
 function PortalPublico() {
+  const { isAuthenticated, profile } = useAuth()
   const [properties, setProperties] = useState([])
   const [filters, setFilters] = useState({ search: '', operationType: '' })
   const [loading, setLoading] = useState(true)
@@ -41,6 +44,7 @@ function PortalPublico() {
 
   const hasActiveFilter = Boolean(filters.search || filters.operationType)
   const operationLabel = filters.operationType ? `Resultados para: ${filters.operationType}` : null
+  const panelPath = isAuthenticated ? getRoleHome(profile?.role) : '/login'
 
   return (
     <>
@@ -49,15 +53,15 @@ function PortalPublico() {
         <section className="portal-hero">
           <div className="portal-hero-inner">
             <div className="portal-hero-copy">
-              <p className="eyebrow">Locative</p>
-              <h1>Encontrá tu próximo lugar</h1>
-              <p>Explorá inmuebles disponibles y encontrá la opción ideal para alquilar o comprar.</p>
+              <p className="eyebrow">Vidriera inmobiliaria</p>
+              <h1>Propiedades disponibles de la inmobiliaria</h1>
+              <p>Consultá inmuebles en alquiler y venta publicados por nuestro equipo.</p>
             </div>
             <form className="portal-search-card" onSubmit={handleSubmit}>
               <input
                 name="search"
                 type="search"
-                placeholder="Buscar por dirección, ciudad o título"
+                placeholder="Buscar por dirección, ciudad, barrio o tipo de propiedad"
                 value={filters.search}
                 onChange={handleChange}
               />
@@ -75,7 +79,7 @@ function PortalPublico() {
           <div className="portal-results-header">
             <div>
               <p className="eyebrow">Inmuebles</p>
-              <h2>Propiedades disponibles</h2>
+              <h2>Propiedades publicadas</h2>
             </div>
             <div className="portal-results-meta">
               <span>Mostrando {properties.length} propiedades</span>
@@ -118,11 +122,33 @@ function PortalPublico() {
 
           <section className="portal-cta">
             <div>
-              <p className="eyebrow">Locative para equipos</p>
-              <h2>¿Trabajás en la inmobiliaria?</h2>
-              <p>Administrá propiedades, contratos, pagos y arreglos de la inmobiliaria desde un solo sistema.</p>
+              <p className="eyebrow">Acceso institucional</p>
+              <h2>Panel de gestión de la inmobiliaria</h2>
+              <p>Acceso exclusivo para usuarios autorizados: agentes, propietarios, inquilinos y profesionales registrados.</p>
             </div>
-            <Link className="button-link" to="/login">Ingresar al sistema</Link>
+            <Link className="button-link" to={panelPath}>Ingresar al panel</Link>
+          </section>
+
+          <section className="portal-contact">
+            <div>
+              <p className="eyebrow">Contacto</p>
+              <h2>Consultá por una propiedad</h2>
+              <p>Coordiná una visita o solicitá más información con la inmobiliaria.</p>
+            </div>
+            <div className="portal-contact-grid">
+              <article>
+                <strong>WhatsApp</strong>
+                <span>Disponible próximamente</span>
+              </article>
+              <article>
+                <strong>Dirección</strong>
+                <span>Dirección de la inmobiliaria</span>
+              </article>
+              <article>
+                <strong>Horario</strong>
+                <span>Lunes a viernes de 8:00 a 17:00</span>
+              </article>
+            </div>
           </section>
         </section>
       </main>
