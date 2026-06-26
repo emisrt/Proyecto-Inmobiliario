@@ -54,15 +54,24 @@ function isNavigationItemActive(item, pathname) {
   return pathname === matchPath || pathname.startsWith(`${matchPath}/`)
 }
 
-function DashboardLayout({ title, role, children }) {
+function DashboardLayout({ title, role, roleLabel, organizationName, headingEyebrow, children }) {
   const { logout, profile } = useAuth()
   const location = useLocation()
   const navItems = roleNavigation[role] || roleNavigation.Inmobiliaria
+  const displayRole = roleLabel || role
 
   return (
     <div className="figma-dashboard">
       <header className="figma-dashboard-topbar">
-        <BrandLogo compact variant="light" />
+        <div className="dashboard-organization">
+          <BrandLogo compact variant="light" />
+          {organizationName ? (
+            <div>
+              <strong>{organizationName}</strong>
+              <span>Sistema interno</span>
+            </div>
+          ) : null}
+        </div>
         <div className="dashboard-userbar">
           <button className="notification-button" type="button" aria-label="Notificaciones">
             <Bell size={17} />
@@ -73,7 +82,7 @@ function DashboardLayout({ title, role, children }) {
           </div>
           <div className="dashboard-user-copy">
             <p>{profile?.full_name || 'Usuario Locative'}</p>
-            <span>{role}</span>
+            <span>{displayRole}</span>
           </div>
           <button className="dashboard-logout-button" type="button" onClick={logout}>
             <LogOut size={15} />
@@ -98,12 +107,12 @@ function DashboardLayout({ title, role, children }) {
           </nav>
           <div className="figma-sidebar-profile">
             <p>{profile?.full_name || 'Usuario Locative'}</p>
-            <span>{role}</span>
+            <span>{displayRole}</span>
           </div>
         </aside>
         <main className="figma-dashboard-main">
           <section className="figma-dashboard-heading">
-            <p>Sesión iniciada como {role}</p>
+            <p>{headingEyebrow || `Sesión iniciada como ${displayRole}`}</p>
             <h1>{title}</h1>
           </section>
           {children}
