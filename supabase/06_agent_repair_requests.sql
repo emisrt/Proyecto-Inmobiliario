@@ -14,7 +14,87 @@ drop constraint if exists repair_requests_requested_by_role_check;
 alter table public.repair_requests
 add constraint repair_requests_requested_by_role_check check (
   requested_by_role is null
-  or requested_by_role in ('inquilino', 'agente_inmobiliario')
+  or requested_by_role in ('inquilino', 'agente_inmobiliario', 'propietario')
+);
+
+drop policy if exists "repair_requests_select_related" on public.repair_requests;
+drop policy if exists "repair_requests_insert_tenant" on public.repair_requests;
+drop policy if exists "repair_requests_insert_agent" on public.repair_requests;
+drop policy if exists "repair_requests_update_agent" on public.repair_requests;
+
+create policy "repair_requests_select_related"
+on public.repair_requests
+for select
+to authenticated
+using (
+  tenant_id = auth.uid()
+  or created_by_id = auth.uid()
+  or assigned_professional_id = auth.uid()
+  or (
+    public.current_user_role() = 'profesional'
+    and status in ('publicada', 'publicado')
+  )
+  or (
+    public.current_user_role() = 'agente_inmobiliario'
+    and exists (
+      select 1
+      from public.properties p
+      where p.id = repair_requests.property_id
+        and p.agent_id = auth.uid()
+    )
+  )
+);
+
+create policy "repair_requests_insert_tenant"
+on public.repair_requests
+for insert
+to authenticated
+with check (
+  public.current_user_role() = 'inquilino'
+  and property_id is not null
+  and tenant_id = auth.uid()
+  and created_by_id = auth.uid()
+  and requested_by_role = 'inquilino'
+);
+
+create policy "repair_requests_insert_agent"
+on public.repair_requests
+for insert
+to authenticated
+with check (
+  public.current_user_role() = 'agente_inmobiliario'
+  and property_id is not null
+  and created_by_id = auth.uid()
+  and requested_by_role = 'agente_inmobiliario'
+  and exists (
+    select 1
+    from public.properties p
+    where p.id = repair_requests.property_id
+      and p.agent_id = auth.uid()
+  )
+);
+
+create policy "repair_requests_update_agent"
+on public.repair_requests
+for update
+to authenticated
+using (
+  public.current_user_role() = 'agente_inmobiliario'
+  and exists (
+    select 1
+    from public.properties p
+    where p.id = repair_requests.property_id
+      and p.agent_id = auth.uid()
+  )
+)
+with check (
+  public.current_user_role() = 'agente_inmobiliario'
+  and exists (
+    select 1
+    from public.properties p
+    where p.id = repair_requests.property_id
+      and p.agent_id = auth.uid()
+  )
 );
 
 create or replace function public.create_agent_repair_request(
@@ -48,6 +128,15 @@ begin
 
   if p_property_id is null then
     raise exception 'La propiedad es obligatoria.';
+  end if;
+
+  if not exists (
+    select 1
+    from public.properties p
+    where p.id = p_property_id
+      and p.agent_id = auth.uid()
+  ) then
+    raise exception 'La propiedad no esta administrada por el agente autenticado.';
   end if;
 
   if coalesce(trim(p_title), '') = '' then

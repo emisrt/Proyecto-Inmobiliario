@@ -48,12 +48,17 @@ export async function listAgentRepairs({ status = '' } = {}) {
   return data || []
 }
 
-export async function listRepairProperties() {
-  const { data, error } = await supabase
+export async function listRepairProperties(agentId) {
+  let query = supabase
     .from('properties')
     .select('id, title, address, city, status')
     .order('title', { ascending: true })
 
+  if (agentId) {
+    query = query.eq('agent_id', agentId)
+  }
+
+  const { data, error } = await query
   if (error) throw error
   return data || []
 }
@@ -105,6 +110,8 @@ export async function createTenantRepair(userId, values) {
     property_id: activeContract.property_id,
     contract_id: activeContract.id,
     tenant_id: userId,
+    created_by_id: userId,
+    requested_by_role: 'inquilino',
     title: values.title,
     description: values.description || null,
     repair_type: values.repair_type,

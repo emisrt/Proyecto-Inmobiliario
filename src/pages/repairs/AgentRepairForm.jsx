@@ -39,7 +39,7 @@ function AgentRepairForm() {
       setError(null)
 
       try {
-        const data = await listRepairProperties()
+        const data = await listRepairProperties(user.id)
         if (isMounted) setProperties(data)
       } catch (propertyError) {
         if (isMounted) setError(propertyError.message)
@@ -48,12 +48,12 @@ function AgentRepairForm() {
       }
     }
 
-    loadProperties()
+    if (user?.id) loadProperties()
 
     return () => {
       isMounted = false
     }
-  }, [])
+  }, [user?.id])
 
   async function loadActiveContract(propertyId) {
     if (!propertyId) {

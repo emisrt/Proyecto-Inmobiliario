@@ -49,6 +49,7 @@ drop policy if exists "payments_update_agent" on public.payments;
 drop policy if exists "payments_delete_agent" on public.payments;
 drop policy if exists "repair_requests_select_related" on public.repair_requests;
 drop policy if exists "repair_requests_insert_tenant" on public.repair_requests;
+drop policy if exists "repair_requests_insert_agent" on public.repair_requests;
 drop policy if exists "repair_requests_update_agent" on public.repair_requests;
 drop policy if exists "professional_profiles_select_related" on public.professional_profiles;
 drop policy if exists "professional_profiles_insert_own" on public.professional_profiles;
@@ -179,12 +180,21 @@ on public.repair_requests
 for select
 to authenticated
 using (
-  public.is_agent()
-  or tenant_id = auth.uid()
+  tenant_id = auth.uid()
+  or created_by_id = auth.uid()
   or assigned_professional_id = auth.uid()
   or (
     public.current_user_role() = 'profesional'
     and status in ('publicada', 'publicado')
+  )
+  or (
+    public.current_user_role() = 'agente_inmobiliario'
+    and exists (
+      select 1
+      from public.properties p
+      where p.id = repair_requests.property_id
+        and p.agent_id = auth.uid()
+    )
   )
 );
 
@@ -194,15 +204,51 @@ for insert
 to authenticated
 with check (
   public.current_user_role() = 'inquilino'
+  and property_id is not null
   and tenant_id = auth.uid()
+  and created_by_id = auth.uid()
+  and requested_by_role = 'inquilino'
+);
+
+create policy "repair_requests_insert_agent"
+on public.repair_requests
+for insert
+to authenticated
+with check (
+  public.current_user_role() = 'agente_inmobiliario'
+  and property_id is not null
+  and created_by_id = auth.uid()
+  and requested_by_role = 'agente_inmobiliario'
+  and exists (
+    select 1
+    from public.properties p
+    where p.id = repair_requests.property_id
+      and p.agent_id = auth.uid()
+  )
 );
 
 create policy "repair_requests_update_agent"
 on public.repair_requests
 for update
 to authenticated
-using (public.is_agent())
-with check (public.is_agent());
+using (
+  public.current_user_role() = 'agente_inmobiliario'
+  and exists (
+    select 1
+    from public.properties p
+    where p.id = repair_requests.property_id
+      and p.agent_id = auth.uid()
+  )
+)
+with check (
+  public.current_user_role() = 'agente_inmobiliario'
+  and exists (
+    select 1
+    from public.properties p
+    where p.id = repair_requests.property_id
+      and p.agent_id = auth.uid()
+  )
+);
 
 -- Professional profiles
 create policy "professional_profiles_select_related"

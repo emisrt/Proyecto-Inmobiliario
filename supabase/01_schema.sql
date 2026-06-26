@@ -76,7 +76,7 @@ create table if not exists public.contracts (
 create table if not exists public.payments (
   id uuid primary key default gen_random_uuid(),
   contract_id uuid not null references public.contracts(id) on delete cascade,
-  tenant_id uuid not null references public.profiles(id) on delete cascade,
+  tenant_id uuid references public.profiles(id) on delete cascade,
   amount numeric(12, 2) not null default 0,
   issue_date date not null default current_date,
   due_date date not null,
@@ -108,7 +108,7 @@ create table if not exists public.repair_requests (
   constraint repair_requests_priority_check check (priority in ('baja', 'media', 'alta', 'urgente')),
   constraint repair_requests_requested_by_role_check check (
     requested_by_role is null
-    or requested_by_role in ('inquilino', 'agente_inmobiliario')
+    or requested_by_role in ('inquilino', 'agente_inmobiliario', 'propietario')
   ),
   constraint repair_requests_status_check check (
     status in (
