@@ -34,15 +34,15 @@ function Register() {
       return
     }
 
-    setMessage('Registro creado. Revisar confirmacion de email si Supabase la solicita.')
+    setMessage('Usuario demo creado. Revisá confirmación de email si Supabase la solicita.')
   }
 
   return (
     <AuthShell
-      eyebrow="Alta inicial"
-      title="Crear cuenta"
-      description="Registra un usuario de prueba para validar los accesos por rol."
-      footer={<Link to="/login">Ya tengo una cuenta</Link>}
+      eyebrow="Acceso demo"
+      title="Solicitar acceso"
+      description="Alta de usuario para el prototipo académico de la inmobiliaria. En producción, estos accesos serían administrados por el agente inmobiliario."
+      footer={<Link to="/login">Ya tengo acceso</Link>}
     >
       <form className="figma-auth-form" onSubmit={handleSubmit}>
         <label>
@@ -78,7 +78,7 @@ function Register() {
           </span>
           <input
             type="password"
-            placeholder="Minimo 6 caracteres"
+            placeholder="Mínimo 6 caracteres"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required
@@ -88,7 +88,7 @@ function Register() {
         <label>
           <span>
             <Phone size={14} />
-            Telefono
+            Teléfono
           </span>
           <input
             type="tel"
@@ -100,7 +100,7 @@ function Register() {
         <label>
           <span>
             <User size={14} />
-            Rol
+            Rol vinculado a la inmobiliaria
           </span>
           <select value={role} onChange={(event) => setRole(event.target.value)} required>
             <option value="" disabled>
@@ -109,7 +109,7 @@ function Register() {
             <option value="agente_inmobiliario">Agente inmobiliario</option>
             <option value="propietario">Propietario</option>
             <option value="inquilino">Inquilino</option>
-            <option value="profesional">Profesional</option>
+            <option value="profesional">Profesional externo</option>
             <option value="visitante">Visitante</option>
           </select>
         </label>
@@ -121,7 +121,7 @@ function Register() {
         ) : null}
         {message ? <p className="success-message">{message}</p> : null}
         <button type="submit" disabled={loading}>
-          {loading ? 'Registrando...' : 'Registrar'}
+          {loading ? 'Creando acceso...' : 'Crear usuario demo'}
         </button>
       </form>
     </AuthShell>

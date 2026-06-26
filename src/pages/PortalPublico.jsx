@@ -119,8 +119,8 @@ function PortalPublico() {
           <section className="portal-cta">
             <div>
               <p className="eyebrow">Locative para equipos</p>
-              <h2>¿Sos inmobiliaria?</h2>
-              <p>Gestioná propiedades, contratos, pagos y arreglos desde una sola plataforma.</p>
+              <h2>¿Trabajás en la inmobiliaria?</h2>
+              <p>Administrá propiedades, contratos, pagos y arreglos de la inmobiliaria desde un solo sistema.</p>
             </div>
             <Link className="button-link" to="/login">Ingresar al sistema</Link>
           </section>

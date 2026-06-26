@@ -22,7 +22,7 @@ function PublicHeader() {
         ) : (
           <>
             <NavLink to="/login">Ingresar</NavLink>
-            <NavLink to="/register">Registro</NavLink>
+            <NavLink to="/register">Acceso demo</NavLink>
           </>
         )}
         </nav>

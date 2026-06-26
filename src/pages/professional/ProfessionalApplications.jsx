@@ -44,7 +44,7 @@ function ProfessionalApplications() {
   ]
 
   return (
-    <DashboardLayout title="Mis postulaciones" role="Profesional de arreglos">
+    <DashboardLayout title="Mis postulaciones" role="Profesional externo">
       <section className="panel dashboard-section">
         {loading ? <p className="muted">Cargando postulaciones...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}

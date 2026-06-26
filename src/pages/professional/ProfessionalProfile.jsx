@@ -79,7 +79,7 @@ function ProfessionalProfile() {
   }
 
   return (
-    <DashboardLayout title="Perfil profesional" role="Profesional de arreglos">
+    <DashboardLayout title="Perfil profesional" role="Profesional externo">
       <section className="panel dashboard-section">
         {loading ? <p className="muted">Cargando perfil...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}
@@ -98,7 +98,7 @@ function ProfessionalProfile() {
             <input name="availability" value={values.availability} onChange={handleChange} placeholder="Ej: lunes a viernes" />
           </label>
           <label>
-            Descripcion del servicio
+            Descripción del servicio
             <textarea name="service_description" value={values.service_description} onChange={handleChange} rows="4" />
           </label>
           <button type="submit" disabled={saving}>{saving ? 'Guardando...' : 'Guardar perfil'}</button>

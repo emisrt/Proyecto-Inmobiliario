@@ -2,15 +2,15 @@
 
 ## Objetivo
 
-Mostrar un prototipo funcional de Locative conectado a Supabase, con portal publico de propiedades, autenticacion por roles, gestion de propiedades, solicitudes de arreglo, postulaciones de profesionales y dashboards con datos reales.
+Mostrar un prototipo funcional de Locative conectado a Supabase como sistema interno de una inmobiliaria especifica, con portal publico de sus propiedades, autenticacion por roles, gestion de propiedades, solicitudes de arreglo, postulaciones de profesionales y dashboards con datos reales.
 
 ## Usuarios de prueba
 
-Crear usuarios en Supabase Auth o desde `/register` y verificar que exista su fila en `public.profiles`:
+Crear usuarios demo en Supabase Auth o desde `/register` y verificar que exista su fila en `public.profiles`. En un entorno productivo, el alta seria administrada por la inmobiliaria:
 
 - Agente inmobiliario: `role = agente_inmobiliario`
 - Inquilino: `role = inquilino`
-- Profesional: `role = profesional`
+- Profesional externo: `role = profesional`
 - Propietario: `role = propietario`
 - Visitante: puede navegar sin iniciar sesion por `/portal`
 
@@ -55,7 +55,7 @@ Crear usuarios en Supabase Auth o desde `/register` y verificar que exista su fi
 
 ## Funcionalidades implementadas
 
-- Portal publico conectado a Supabase.
+- Portal publico de propiedades de la inmobiliaria conectado a Supabase.
 - Detalle publico de propiedades.
 - Listado, alta, edicion, detalle y cambio de estado de propiedades para inmobiliaria.
 - Asignacion de inquilino a propiedad en alquiler con contrato.
@@ -63,7 +63,7 @@ Crear usuarios en Supabase Auth o desde `/register` y verificar que exista su fi
 - Solicitudes de arreglo del inquilino conectadas al contrato activo.
 - Gestion de arreglos desde inmobiliaria con estado, prioridad y observaciones.
 - Creacion de solicitudes de arreglo desde inmobiliaria sobre cualquier propiedad gestionada.
-- Perfil profesional editable.
+- Perfil de profesional externo editable.
 - Arreglos disponibles para profesionales.
 - Postulaciones con control de duplicados.
 - Gestion de postulaciones desde inmobiliaria con aceptacion y rechazo.

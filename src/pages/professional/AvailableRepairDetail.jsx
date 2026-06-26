@@ -63,7 +63,7 @@ function AvailableRepairDetail() {
   }
 
   return (
-    <DashboardLayout title="Detalle de arreglo disponible" role="Profesional de arreglos">
+    <DashboardLayout title="Detalle de arreglo disponible" role="Profesional externo">
       <section className="panel dashboard-section">
         {loading ? <p className="muted">Cargando arreglo...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}

@@ -45,7 +45,7 @@ function AvailableRepairs() {
   ]
 
   return (
-    <DashboardLayout title="Arreglos disponibles" role="Profesional de arreglos">
+    <DashboardLayout title="Arreglos disponibles" role="Profesional externo">
       <section className="panel dashboard-section">
         {loading ? <p className="muted">Cargando trabajos disponibles...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}

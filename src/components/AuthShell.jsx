@@ -16,7 +16,7 @@ function AuthShell({ eyebrow, title, description, children, footer, showValuePan
         <div className="auth-brand-inner">
           <div className="auth-brand-cluster">
             <BrandLogo variant="dark" />
-            <span>Gestión inmobiliaria integral</span>
+            <span>Sistema interno de gestión inmobiliaria</span>
           </div>
           <Link className="auth-header-link" to="/portal">
             Ver propiedades
@@ -30,7 +30,7 @@ function AuthShell({ eyebrow, title, description, children, footer, showValuePan
               <p className="eyebrow">Locative</p>
               <h1>Gestioná tus alquileres en un solo lugar</h1>
               <p>
-                Centralizá propiedades, contratos, pagos, arreglos y profesionales desde una plataforma simple e integral.
+                Centralizá propiedades, contratos, pagos, arreglos y profesionales de la inmobiliaria desde un sistema simple e integral.
               </p>
               <div className="auth-value-grid">
                 {valueItems.map((item) => {

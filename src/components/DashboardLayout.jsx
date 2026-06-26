@@ -12,6 +12,14 @@ import {
 import { useAuth } from '../context/useAuth'
 import BrandLogo from './BrandLogo'
 
+const professionalNavigation = [
+  { to: '/profesional', label: 'Inicio', icon: Home, exact: true },
+  { to: '/profesional/perfil', label: 'Perfil', icon: User },
+  { to: '/profesional/arreglos-disponibles', label: 'Disponibles', icon: Wrench },
+  { to: '/profesional/postulaciones', label: 'Postulaciones', icon: FileText },
+  { to: '/profesional/trabajos-asignados', label: 'Asignados', icon: Building2 },
+]
+
 const roleNavigation = {
   Inmobiliaria: [
     { to: '/inmobiliaria', label: 'Inicio', icon: Home, exact: true },
@@ -32,13 +40,8 @@ const roleNavigation = {
     { to: '/inquilino', match: '/inquilino/contrato', label: 'Mi contrato', icon: FileText },
     { to: '/inquilino/arreglos', label: 'Arreglos', icon: Wrench },
   ],
-  'Profesional de arreglos': [
-    { to: '/profesional', label: 'Inicio', icon: Home, exact: true },
-    { to: '/profesional/perfil', label: 'Perfil', icon: User },
-    { to: '/profesional/arreglos-disponibles', label: 'Disponibles', icon: Wrench },
-    { to: '/profesional/postulaciones', label: 'Postulaciones', icon: FileText },
-    { to: '/profesional/trabajos-asignados', label: 'Asignados', icon: Building2 },
-  ],
+  'Profesional externo': professionalNavigation,
+  'Profesional de arreglos': professionalNavigation,
 }
 
 function isNavigationItemActive(item, pathname) {
@@ -100,7 +103,7 @@ function DashboardLayout({ title, role, children }) {
         </aside>
         <main className="figma-dashboard-main">
           <section className="figma-dashboard-heading">
-            <p>Sesion iniciada como {role}</p>
+            <p>Sesión iniciada como {role}</p>
             <h1>{title}</h1>
           </section>
           {children}

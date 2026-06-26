@@ -101,7 +101,7 @@ function DashboardProfesional() {
   }, [user?.id])
 
   return (
-    <DashboardLayout title="Panel de Profesional" role="Profesional de arreglos">
+    <DashboardLayout title="Panel de profesional externo" role="Profesional externo">
       {loading ? <p className="muted">Cargando datos profesionales...</p> : null}
       {error ? <p className="error-message">{error}</p> : null}
 

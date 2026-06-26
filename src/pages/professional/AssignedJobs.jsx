@@ -44,7 +44,7 @@ function AssignedJobs() {
   ]
 
   return (
-    <DashboardLayout title="Trabajos asignados" role="Profesional de arreglos">
+    <DashboardLayout title="Trabajos asignados" role="Profesional externo">
       <section className="panel dashboard-section">
         {loading ? <p className="muted">Cargando trabajos asignados...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}

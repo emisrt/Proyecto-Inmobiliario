@@ -1,16 +1,22 @@
-# React + Vite
+# Locative
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Locative es un sistema web interno de gestión inmobiliaria desarrollado como prototipo académico. El sistema está orientado a una inmobiliaria específica que administra su cartera de propiedades, contratos, pagos, arreglos, profesionales externos y publicaciones visibles en un portal público.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- ReactJS + Vite
+- Supabase PostgreSQL
+- Supabase Auth
+- Roles + Row Level Security
 
-## React Compiler
+## Enfoque
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+El proyecto no implementa multi-agencia ni planes comerciales. Los roles representan actores vinculados a la misma inmobiliaria:
 
-## Expanding the Oxlint configuration
+- agente inmobiliario
+- propietario
+- inquilino
+- profesional externo
+- visitante
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Para más detalle ver `ENFOQUE_PROYECTO.md`.

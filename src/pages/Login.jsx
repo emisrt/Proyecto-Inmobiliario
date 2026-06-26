@@ -26,7 +26,7 @@ function Login() {
       eyebrow="Acceso al sistema"
       title="Iniciar sesión"
       description="Ingresá con tu correo electrónico y contraseña para acceder a Locative."
-      footer={<Link to="/register">Crear cuenta de prueba</Link>}
+      footer={<Link to="/register">Solicitar acceso demo</Link>}
       showValuePanel
     >
       <form className="figma-auth-form" onSubmit={handleSubmit}>

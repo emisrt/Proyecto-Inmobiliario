@@ -95,7 +95,7 @@ function DashboardInmobiliaria() {
   }, [])
 
   return (
-    <DashboardLayout title="Panel de Inmobiliaria" role="Inmobiliaria">
+    <DashboardLayout title="Panel interno de la inmobiliaria" role="Inmobiliaria">
       {loading ? <p className="muted">Cargando metricas...</p> : null}
       {error ? <p className="error-message">{error}</p> : null}
 

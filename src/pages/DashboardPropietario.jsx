@@ -2,7 +2,7 @@ import DashboardLayout from '../components/DashboardLayout'
 
 function DashboardPropietario() {
   return (
-    <DashboardLayout title="Panel de Propietario" role="Propietario">
+    <DashboardLayout title="Panel de propietario vinculado" role="Propietario">
       <section className="grid">
         <article className="panel">
           <h2>Mis propiedades</h2>
