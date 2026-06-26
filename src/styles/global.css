@@ -463,6 +463,41 @@ h2 {
   padding: 1rem;
 }
 
+.property-card-link {
+  color: inherit;
+  cursor: pointer;
+  display: block;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.property-card-link:hover,
+.property-card-link:focus-visible {
+  border-color: #93c5fd;
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12);
+  outline: none;
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+
+.property-card h2 {
+  margin-bottom: 0.35rem;
+}
+
+.property-card p {
+  margin-bottom: 0.45rem;
+}
+
+.property-price {
+  color: var(--foreground);
+  display: block;
+  font-size: 1rem;
+  line-height: 1.3;
+  margin-top: 0.75rem;
+}
+
 .property-card-image,
 .detail-image {
   background: #eef2f7;

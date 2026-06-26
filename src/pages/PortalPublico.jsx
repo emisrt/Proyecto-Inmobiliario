@@ -66,7 +66,12 @@ function PortalPublico() {
         {error ? <p className="error-message">{error}</p> : null}
         <section className="property-grid">
           {properties.map((property) => (
-            <article className="property-card" key={property.id}>
+            <Link
+              aria-label={`Ver detalle de ${property.title}`}
+              className="property-card property-card-link"
+              key={property.id}
+              to={`/portal/propiedades/${property.id}`}
+            >
               {property.image_url ? (
                 <img className="property-card-image" src={property.image_url} alt={property.title} />
               ) : (
@@ -76,9 +81,8 @@ function PortalPublico() {
               <h2>{property.title}</h2>
               <p>{property.address}{property.city ? `, ${property.city}` : ''}</p>
               <p><StatusBadge status={property.status} /></p>
-              <strong>{formatCurrency(property.price)}</strong>
-              <Link to={`/portal/propiedades/${property.id}`}>Ver detalle</Link>
-            </article>
+              <strong className="property-price">{formatCurrency(property.price)}</strong>
+            </Link>
           ))}
           {!loading && properties.length === 0 ? <p className="muted">No hay propiedades publicadas.</p> : null}
         </section>
