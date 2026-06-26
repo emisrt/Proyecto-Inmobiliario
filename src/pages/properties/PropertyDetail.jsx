@@ -6,6 +6,8 @@ import StatusBadge from '../../components/StatusBadge'
 import { getProperty, updatePropertyStatus } from '../../services/propertyService'
 import { formatCurrency } from '../../utils/formatters'
 
+const assignableRentalStatuses = ['disponible', 'disponible_alquiler']
+
 function PropertyDetail({ publicView = false }) {
   const { id } = useParams()
   const [property, setProperty] = useState(null)
@@ -74,6 +76,11 @@ function PropertyDetail({ publicView = false }) {
                 <Link className="button-link" to={`/inmobiliaria/propiedades/${property.id}/editar`}>
                   Editar
                 </Link>
+                {property.operation_type === 'alquiler' && assignableRentalStatuses.includes(property.status) ? (
+                  <Link className="button-link" to={`/inmobiliaria/propiedades/${property.id}/asignar-inquilino`}>
+                    Asignar inquilino
+                  </Link>
+                ) : null}
                 <button type="button" onClick={() => changeStatus('suspendida')}>Suspender</button>
                 <button type="button" onClick={() => changeStatus('disponible')}>Reactivar</button>
                 <button type="button" onClick={() => changeStatus('anulada')}>Anular</button>

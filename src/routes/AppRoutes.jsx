@@ -13,6 +13,7 @@ import AvailableRepairDetail from '../pages/professional/AvailableRepairDetail'
 import AvailableRepairs from '../pages/professional/AvailableRepairs'
 import ProfessionalApplications from '../pages/professional/ProfessionalApplications'
 import ProfessionalProfile from '../pages/professional/ProfessionalProfile'
+import AssignTenant from '../pages/properties/AssignTenant'
 import PropertyDetail from '../pages/properties/PropertyDetail'
 import PropertyForm from '../pages/properties/PropertyForm'
 import PropertyList from '../pages/properties/PropertyList'
@@ -69,6 +70,14 @@ function AppRoutes() {
         element={
           <RoleProtectedRoute allowedRoles={['agente_inmobiliario']}>
             <PropertyForm />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/inmobiliaria/propiedades/:id/asignar-inquilino"
+        element={
+          <RoleProtectedRoute allowedRoles={['agente_inmobiliario']}>
+            <AssignTenant />
           </RoleProtectedRoute>
         }
       />

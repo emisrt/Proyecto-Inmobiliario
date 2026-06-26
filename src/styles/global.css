@@ -549,6 +549,35 @@ h2 {
   margin: 0;
 }
 
+.assignment-summary,
+.tenant-result {
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-lg);
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.assignment-summary h2,
+.tenant-result h2 {
+  margin-bottom: 0.35rem;
+}
+
+.assignment-summary strong {
+  display: block;
+  margin-top: 0.65rem;
+  text-align: right;
+}
+
+.assignment-search {
+  align-items: end;
+  grid-template-columns: minmax(220px, 1fr) auto;
+}
+
 .stat-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -1065,8 +1094,15 @@ h2 {
 
   .two-column-form,
   .detail-layout,
-  .detail-list div {
+  .detail-list div,
+  .assignment-search {
     grid-template-columns: 1fr;
+  }
+
+  .assignment-summary,
+  .tenant-result {
+    align-items: flex-start;
+    display: grid;
   }
 
   .sidebar {

@@ -6,6 +6,7 @@ create extension if not exists pgcrypto;
 create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   full_name text,
+  email text,
   role text not null default 'visitante',
   phone text,
   created_at timestamp with time zone not null default now(),
@@ -66,7 +67,7 @@ create table if not exists public.contracts (
   rules text,
   created_at timestamp with time zone not null default now(),
   constraint contracts_status_check check (
-    status in ('borrador', 'activo', 'finalizado', 'rescindido', 'vencido')
+    status in ('borrador', 'pendiente', 'activo', 'finalizado', 'rescindido', 'vencido')
   ),
   constraint contracts_dates_check check (end_date >= start_date),
   constraint contracts_monthly_amount_check check (monthly_amount >= 0)
@@ -187,10 +188,11 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, full_name, role, phone)
+  insert into public.profiles (id, full_name, email, role, phone)
   values (
     new.id,
     new.raw_user_meta_data ->> 'full_name',
+    new.email,
     coalesce(new.raw_user_meta_data ->> 'role', 'visitante'),
     new.raw_user_meta_data ->> 'phone'
   )

@@ -19,6 +19,7 @@ Crear usuarios en Supabase Auth o desde `/register` y verificar que exista su fi
 - Ejecutar `supabase/01_schema.sql`.
 - Ejecutar `supabase/02_rls.sql`.
 - Ejecutar `supabase/04_demo_compatibility.sql` si la base ya existia antes de esta etapa.
+- Ejecutar `supabase/05_assign_tenant.sql` para habilitar asignacion de inquilinos y contratos pendientes.
 - Cargar al menos una propiedad en estado `disponible`, `disponible_alquiler` o `disponible_venta`.
 - Cargar un contrato `activo` para el usuario inquilino, asociado a una propiedad.
 - Cargar pagos del contrato si se quiere probar el dashboard del inquilino.
@@ -33,25 +34,29 @@ Crear usuarios en Supabase Auth o desde `/register` y verificar que exista su fi
 5. Entrar a `/inmobiliaria/propiedades`.
 6. Crear una propiedad desde `/inmobiliaria/propiedades/nueva`.
 7. Editar o cambiar estado desde el detalle de la propiedad.
-8. Entrar a `/inmobiliaria/arreglos`.
-9. Publicar una solicitud cambiando su estado a `publicada`.
-10. Cerrar sesion e iniciar como profesional.
-11. Completar perfil en `/profesional/perfil`.
-12. Entrar a `/profesional/arreglos-disponibles`.
-13. Abrir un arreglo y postularse.
-14. Revisar `/profesional/postulaciones`.
-15. Cerrar sesion e iniciar nuevamente como agente inmobiliario.
-16. Entrar a `/inmobiliaria/arreglos/:id/postulaciones`.
-17. Aceptar una postulacion.
-18. Verificar que el arreglo queda `en_proceso` y con profesional asignado.
-19. Iniciar como inquilino.
-20. Entrar a `/inquilino`, `/inquilino/arreglos` y crear una solicitud en `/inquilino/arreglos/nuevo`.
+8. En una propiedad de alquiler disponible, usar `Asignar inquilino`.
+9. Buscar un usuario por ID o email, completar fechas, monto y confirmar contrato.
+10. Verificar que la propiedad queda `alquilada` y el usuario queda con rol `inquilino`.
+11. Entrar a `/inmobiliaria/arreglos`.
+12. Publicar una solicitud cambiando su estado a `publicada`.
+13. Cerrar sesion e iniciar como profesional.
+14. Completar perfil en `/profesional/perfil`.
+15. Entrar a `/profesional/arreglos-disponibles`.
+16. Abrir un arreglo y postularse.
+17. Revisar `/profesional/postulaciones`.
+18. Cerrar sesion e iniciar nuevamente como agente inmobiliario.
+19. Entrar a `/inmobiliaria/arreglos/:id/postulaciones`.
+20. Aceptar una postulacion.
+21. Verificar que el arreglo queda `en_proceso` y con profesional asignado.
+22. Iniciar como inquilino.
+23. Entrar a `/inquilino`, `/inquilino/arreglos` y crear una solicitud en `/inquilino/arreglos/nuevo`.
 
 ## Funcionalidades implementadas
 
 - Portal publico conectado a Supabase.
 - Detalle publico de propiedades.
 - Listado, alta, edicion, detalle y cambio de estado de propiedades para inmobiliaria.
+- Asignacion de inquilino a propiedad en alquiler con contrato.
 - Dashboards conectados a Supabase para inmobiliaria, inquilino y profesional.
 - Solicitudes de arreglo del inquilino conectadas al contrato activo.
 - Gestion de arreglos desde inmobiliaria con estado, prioridad y observaciones.
