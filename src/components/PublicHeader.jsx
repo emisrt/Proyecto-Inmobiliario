@@ -7,9 +7,10 @@ function PublicHeader() {
   const { isAuthenticated, loading, logout, profile } = useAuth()
 
   return (
-    <header className="topbar">
-      <BrandLogo />
-      <nav className="nav">
+    <header className="public-header">
+      <div className="public-header-inner">
+        <BrandLogo />
+        <nav className="nav public-nav">
         <NavLink to="/portal">Propiedades</NavLink>
         {!loading && isAuthenticated ? (
           <>
@@ -24,7 +25,8 @@ function PublicHeader() {
             <NavLink to="/register">Registro</NavLink>
           </>
         )}
-      </nav>
+        </nav>
+      </div>
     </header>
   )
 }
