@@ -1,4 +1,5 @@
 import { Building2, CreditCard, FileText, Wrench } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import BrandLogo from './BrandLogo'
 
 const valueItems = [
@@ -13,8 +14,13 @@ function AuthShell({ eyebrow, title, description, children, footer, showValuePan
     <div className="auth-shell">
       <header className="auth-brand-bar">
         <div className="auth-brand-inner">
-          <BrandLogo compact variant="dark" />
-          <p>Gestion inmobiliaria integral</p>
+          <div className="auth-brand-cluster">
+            <BrandLogo variant="dark" />
+            <span>Gestión inmobiliaria integral</span>
+          </div>
+          <Link className="auth-header-link" to="/portal">
+            Ver propiedades
+          </Link>
         </div>
       </header>
       <main className="auth-shell-main">

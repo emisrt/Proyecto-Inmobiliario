@@ -159,29 +159,70 @@ button:disabled {
 }
 
 .auth-brand-bar {
-  background: #1a3352;
+  background:
+    linear-gradient(135deg, #102642 0%, #1a3352 58%, #143966 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
   flex-shrink: 0;
-  min-height: 64px;
-  padding: 0.75rem 1.5rem;
+  min-height: 78px;
+  padding: 0 1.5rem;
 }
 
 .auth-brand-inner {
   align-items: center;
   display: flex;
   gap: 1rem;
+  justify-content: space-between;
   margin: 0 auto;
-  max-width: 1120px;
+  max-width: 1180px;
+  min-height: 78px;
+  width: 100%;
+}
+
+.auth-brand-cluster {
+  align-items: center;
+  display: flex;
+  gap: 1.15rem;
+  min-width: 0;
 }
 
 .auth-brand-inner .brand-logo-image {
-  height: 46px;
-  width: 160px;
+  height: 52px;
+  width: 188px;
 }
 
-.auth-brand-inner p {
-  color: rgba(255, 255, 255, 0.58);
-  font-size: 0.75rem;
+.auth-brand-cluster span {
+  border-left: 1px solid rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.2;
   margin: 0;
+  padding-left: 1rem;
+}
+
+.auth-header-link {
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 999px;
+  color: #ffffff;
+  display: inline-flex;
+  font-size: 0.9rem;
+  font-weight: 800;
+  min-height: 40px;
+  padding: 0.55rem 1rem;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.auth-header-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.45);
+  color: #ffffff;
+  text-decoration: none;
+  transform: translateY(-1px);
 }
 
 .auth-shell-main {
@@ -1281,11 +1322,28 @@ h2 {
   }
 
   .auth-brand-inner {
-    justify-content: center;
+    justify-content: space-between;
+    min-height: 72px;
   }
 
-  .auth-brand-inner p {
+  .auth-brand-bar {
+    min-height: 72px;
+    padding: 0 1rem;
+  }
+
+  .auth-brand-inner .brand-logo-image {
+    height: 44px;
+    width: 158px;
+  }
+
+  .auth-brand-cluster span {
     display: none;
+  }
+
+  .auth-header-link {
+    font-size: 0.82rem;
+    min-height: 36px;
+    padding: 0.45rem 0.75rem;
   }
 
   .nav {
