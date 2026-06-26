@@ -24,15 +24,16 @@ function Login() {
   return (
     <AuthShell
       eyebrow="Acceso al sistema"
-      title="Iniciar sesion"
-      description="Ingresa con tu correo electronico y contraseña para acceder a Locative."
+      title="Iniciar sesión"
+      description="Ingresá con tu correo electrónico y contraseña para acceder a Locative."
       footer={<Link to="/register">Crear cuenta de prueba</Link>}
+      showValuePanel
     >
       <form className="figma-auth-form" onSubmit={handleSubmit}>
         <label>
           <span>
             <IdCard size={14} />
-            Correo electronico
+            Correo electrónico
           </span>
           <input
             type="email"
