@@ -769,31 +769,23 @@ h2 {
 }
 
 .portal-hero-copy .eyebrow {
-  color: rgba(255, 255, 255, 0.76);
-  margin-bottom: 0.65rem;
+  color: rgba(255, 255, 255, 0.72);
+  margin-bottom: 0.7rem;
 }
 
 .portal-hero-copy h1 {
   color: #ffffff;
   font-size: 3rem;
   line-height: 1.08;
-  margin-bottom: 1rem;
+  margin-bottom: 0.95rem;
 }
 
 .portal-hero-copy p:not(.eyebrow) {
   color: rgba(255, 255, 255, 0.86);
   font-size: 1.1rem;
   line-height: 1.7;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   max-width: 620px;
-}
-
-.portal-hero-tags {
-  color: rgba(255, 255, 255, 0.76);
-  display: inline-flex;
-  font-size: 0.92rem;
-  font-weight: 800;
-  margin-top: 0.1rem;
 }
 
 .portal-search-card {

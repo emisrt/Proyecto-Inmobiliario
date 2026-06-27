@@ -58,17 +58,16 @@ function PortalPublico() {
           />
           <div className="portal-hero-inner">
             <div className="portal-hero-copy">
-              <p className="eyebrow">BUSCÁ TU PRÓXIMA PROPIEDAD</p>
-              <h1>Encontrá inmuebles en alquiler o venta</h1>
-              <p>Buscá por ubicación, tipo de propiedad o modalidad y encontrá opciones disponibles de forma rápida y simple.</p>
-              <span className="portal-hero-tags">Alquileres · Ventas · Casas · Departamentos</span>
+              <p className="eyebrow">BUSCÁ TU PRÓXIMO LUGAR</p>
+              <h1>Tu próximo lugar empieza acá.</h1>
+              <p>Explorá propiedades disponibles y encontrá una opción que se adapte a vos.</p>
             </div>
             <div className="portal-search-card" role="search" aria-label="Buscar propiedades">
               <input
-                aria-label="Buscar por dirección, ciudad, barrio o tipo de propiedad"
+                aria-label="Buscar por ciudad, barrio o dirección"
                 name="search"
                 type="search"
-                placeholder="Buscar por dirección, ciudad, barrio o tipo de propiedad"
+                placeholder="Buscar por ciudad, barrio o dirección"
                 value={filters.search}
                 onChange={handleChange}
               />
