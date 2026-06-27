@@ -1192,6 +1192,172 @@ h2 {
   z-index: 10;
 }
 
+.professional-profile-heading {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.professional-profile-heading h2 {
+  color: #0f172a;
+  font-size: 1.35rem;
+  margin-bottom: 0.25rem;
+}
+
+.professional-profile-heading p {
+  color: #64748b;
+  margin: 0;
+}
+
+.professional-summary-card {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #edf1f7;
+  border-radius: 22px;
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.06);
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  padding: 1.25rem;
+}
+
+.professional-avatar {
+  align-items: center;
+  background: linear-gradient(135deg, #1268f3, #11154f);
+  border-radius: 22px;
+  color: #ffffff;
+  display: flex;
+  flex-shrink: 0;
+  font-size: 1.35rem;
+  font-weight: 900;
+  height: 72px;
+  justify-content: center;
+  width: 72px;
+}
+
+.professional-summary-main h2 {
+  color: #0f172a;
+  font-size: 1.35rem;
+  margin: 0.15rem 0 0.65rem;
+}
+
+.professional-summary-tags,
+.professional-summary-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.professional-summary-tags span,
+.professional-summary-contact span {
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  color: #475569;
+  display: inline-flex;
+  font-size: 0.82rem;
+  font-weight: 800;
+  gap: 0.35rem;
+  padding: 0.35rem 0.6rem;
+}
+
+.professional-summary-contact {
+  justify-content: flex-end;
+}
+
+.availability-badge.availability-disponible {
+  background: #ecfdf5;
+  border-color: #bbf7d0;
+  color: #047857;
+}
+
+.availability-badge.availability-ocupado {
+  background: #fff7ed;
+  border-color: #fed7aa;
+  color: #c2410c;
+}
+
+.availability-badge.availability-no_disponible {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+.professional-metrics-grid {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.professional-metrics-grid article {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #edf1f7;
+  border-radius: 18px;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.04);
+  color: #1d4ed8;
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem;
+}
+
+.professional-metrics-grid strong {
+  color: #0f172a;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.professional-metrics-grid span {
+  color: #64748b;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.professional-profile-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.professional-view-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.professional-view-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.professional-view-field {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.75rem;
+}
+
+.professional-view-field span {
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.professional-view-field strong {
+  color: #0f172a;
+  font-size: 0.94rem;
+}
+
+.professional-description {
+  color: #475569;
+  line-height: 1.6;
+  margin: 1rem 0 0;
+}
+
 .assignment-summary,
 .tenant-result {
   align-items: center;
@@ -2169,6 +2335,19 @@ h2 {
 }
 
 @media (max-width: 1020px) {
+  .professional-summary-card {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .professional-summary-contact {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+
+  .professional-metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .property-toggle-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -2278,8 +2457,21 @@ h2 {
 
   .property-form-grid,
   .property-media-grid,
-  .property-toggle-grid {
+  .property-toggle-grid,
+  .professional-view-grid,
+  .professional-metrics-grid {
     grid-template-columns: 1fr;
+  }
+
+  .professional-profile-heading,
+  .professional-summary-card {
+    align-items: stretch;
+    display: grid;
+  }
+
+  .professional-avatar {
+    height: 62px;
+    width: 62px;
   }
 
   .property-form-actions {

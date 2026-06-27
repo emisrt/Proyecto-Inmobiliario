@@ -149,12 +149,26 @@ create table if not exists public.repair_requests (
 create table if not exists public.professional_profiles (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null unique references public.profiles(id) on delete cascade,
+  full_name text,
+  business_name text,
+  phone text,
+  whatsapp text,
+  email text,
   specialty text not null,
+  secondary_specialties text,
   work_zone text,
+  city text,
+  province text,
   service_description text,
   availability text,
+  working_days text,
+  working_hours text,
+  experience_years integer not null default 0,
+  license_number text,
+  availability_notes text,
   rating numeric(3, 2) not null default 0,
   created_at timestamp with time zone not null default now(),
+  constraint professional_profiles_experience_years_check check (experience_years >= 0),
   constraint professional_profiles_rating_check check (rating >= 0 and rating <= 5)
 );
 
