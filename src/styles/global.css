@@ -1005,6 +1005,212 @@ h2 {
   font-size: 0.92rem;
 }
 
+.public-property-detail {
+  background: #f6f8fb;
+  min-height: calc(100vh - 76px);
+  padding: 2rem 1.5rem 3rem;
+}
+
+.public-detail-heading,
+.public-detail-main,
+.public-detail-sections {
+  margin: 0 auto;
+  max-width: 1180px;
+}
+
+.public-detail-heading {
+  margin-bottom: 1.25rem;
+}
+
+.public-detail-heading a {
+  align-items: center;
+  color: #1d4ed8;
+  display: inline-flex;
+  font-size: 0.9rem;
+  font-weight: 800;
+  gap: 0.35rem;
+  margin-bottom: 1.1rem;
+}
+
+.public-detail-heading h1 {
+  color: #0f172a;
+  font-size: 2.35rem;
+  line-height: 1.08;
+  margin: 0 0 0.55rem;
+  max-width: 820px;
+}
+
+.public-detail-heading span {
+  align-items: center;
+  color: #64748b;
+  display: inline-flex;
+  font-weight: 800;
+  gap: 0.35rem;
+}
+
+.public-detail-main {
+  display: grid;
+  gap: 1.35rem;
+  grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+}
+
+.public-detail-media {
+  background: #e2e8f0;
+  border-radius: 22px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+  min-height: 480px;
+  overflow: hidden;
+}
+
+.public-detail-media img {
+  display: block;
+  height: 100%;
+  min-height: 480px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.public-detail-placeholder {
+  align-items: center;
+  color: #64748b;
+  display: grid;
+  font-weight: 900;
+  gap: 0.7rem;
+  height: 100%;
+  min-height: 480px;
+  place-items: center;
+}
+
+.public-detail-summary,
+.public-detail-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 22px;
+  box-shadow: 0 18px 44px rgba(15, 23, 42, 0.07);
+}
+
+.public-detail-summary {
+  align-self: start;
+  display: grid;
+  gap: 0.85rem;
+  padding: 1.35rem;
+  position: sticky;
+  top: 96px;
+}
+
+.public-detail-summary h2 {
+  color: #0f172a;
+  font-size: 1.45rem;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.public-detail-location {
+  color: #64748b;
+  font-weight: 800;
+  margin: 0;
+}
+
+.public-detail-price {
+  color: #0f172a;
+  display: block;
+  font-size: 2.15rem;
+  line-height: 1;
+  margin: 0.15rem 0;
+}
+
+.public-detail-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.public-detail-chips span {
+  align-items: center;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  color: #475569;
+  display: inline-flex;
+  font-size: 0.84rem;
+  font-weight: 850;
+  gap: 0.35rem;
+  padding: 0.36rem 0.6rem;
+}
+
+.public-detail-summary-text {
+  color: #475569;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.public-detail-actions {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.25rem;
+}
+
+.public-detail-actions .button-link,
+.public-detail-actions .secondary-button {
+  justify-content: center;
+  text-align: center;
+}
+
+.public-detail-sections {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.35rem;
+}
+
+.public-detail-card {
+  padding: 1.35rem;
+}
+
+.public-detail-card h2 {
+  color: #0f172a;
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.public-detail-card p {
+  color: #475569;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.public-feature-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.public-feature-grid div {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.9rem;
+}
+
+.public-feature-grid span {
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.public-feature-grid strong {
+  color: #0f172a;
+}
+
+.public-contact-card {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
 .detail-image {
   max-height: 360px;
 }
@@ -2329,6 +2535,18 @@ h2 {
 }
 
 @media (max-width: 1020px) {
+  .public-detail-main {
+    grid-template-columns: 1fr;
+  }
+
+  .public-detail-summary {
+    position: static;
+  }
+
+  .public-feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .professional-summary-card {
     grid-template-columns: auto minmax(0, 1fr);
   }
@@ -2581,6 +2799,30 @@ h2 {
   }
 
   .portal-results .property-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .public-property-detail {
+    padding: 1.25rem 1rem 2rem;
+  }
+
+  .public-detail-heading h1 {
+    font-size: 2rem;
+  }
+
+  .public-detail-media,
+  .public-detail-media img,
+  .public-detail-placeholder {
+    min-height: 300px;
+  }
+
+  .public-detail-price {
+    font-size: 1.8rem;
+  }
+
+  .public-feature-grid,
+  .public-contact-card {
+    display: grid;
     grid-template-columns: 1fr;
   }
 

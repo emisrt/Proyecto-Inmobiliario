@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { ArrowLeft, Bath, BedDouble, Car, Droplets, Home, MapPin, Ruler, Trees } from 'lucide-react'
 import DashboardLayout from '../../components/DashboardLayout'
 import PublicHeader from '../../components/PublicHeader'
 import StatusBadge from '../../components/StatusBadge'
@@ -51,8 +52,48 @@ function PropertyDetail({ publicView = false }) {
     return [property.address, property.neighborhood, property.city, property.province].filter(Boolean).join(', ')
   }
 
+  function getShortLocation() {
+    return [property.city, property.province].filter(Boolean).join(', ') || property.address || 'Ubicación a consultar'
+  }
+
   function yesNo(value) {
     return value ? 'Sí' : 'No'
+  }
+
+  function getFeatureChips() {
+    if (!property) return []
+
+    return [
+      property.bedrooms ? { icon: BedDouble, label: `${property.bedrooms} dorm.` } : null,
+      property.bathrooms ? { icon: Bath, label: `${property.bathrooms} baños` } : null,
+      property.total_area ? { icon: Ruler, label: `${property.total_area} m² totales` } : null,
+      !property.total_area && property.covered_area ? { icon: Ruler, label: `${property.covered_area} m² cubiertos` } : null,
+      property.has_garage ? { icon: Car, label: 'Cochera' } : null,
+      property.has_yard ? { icon: Trees, label: 'Patio' } : null,
+      property.has_pool ? { icon: Droplets, label: 'Pileta' } : null,
+    ].filter(Boolean)
+  }
+
+  function getDescriptionSummary() {
+    if (!property.description) return 'Consultá más información sobre esta propiedad.'
+    return property.description.split('.').filter(Boolean)[0].trim()
+  }
+
+  function getPublicFeatures() {
+    if (!property) return []
+
+    return [
+      { label: 'Tipo de inmueble', value: property.property_type },
+      { label: 'Provincia', value: property.province },
+      { label: 'Ciudad', value: property.city },
+      { label: 'Barrio', value: property.neighborhood },
+      { label: 'Superficie total', value: property.total_area ? `${property.total_area} m²` : null },
+      { label: 'Superficie cubierta', value: property.covered_area ? `${property.covered_area} m²` : null },
+      { label: 'Cochera', value: property.has_garage ? 'Sí' : null },
+      { label: 'Patio', value: property.has_yard ? 'Sí' : null },
+      { label: 'Pileta', value: property.has_pool ? 'Sí' : null },
+      { label: 'Mascotas permitidas', value: property.pets_allowed ? 'Sí' : null },
+    ].filter((item) => item.value)
   }
 
   const content = (
@@ -117,12 +158,93 @@ function PropertyDetail({ publicView = false }) {
     return (
       <>
         <PublicHeader />
-        <main className="page">
-          <section className="page-heading">
-            <p>Locative</p>
-            <h1>Detalle de propiedad</h1>
-          </section>
-          {content}
+        <main className="public-property-detail">
+          {loading ? <p className="muted">Cargando propiedad...</p> : null}
+          {error ? <p className="error-message">{error}</p> : null}
+          {property ? (
+            <>
+              <section className="public-detail-heading">
+                <Link to="/portal">
+                  <ArrowLeft size={16} />
+                  Volver a propiedades
+                </Link>
+                <p className="eyebrow">Propiedad</p>
+                <h1>{property.title}</h1>
+                <span>
+                  <MapPin size={16} />
+                  {getShortLocation()}
+                </span>
+              </section>
+
+              <section className="public-detail-main">
+                <div className="public-detail-media">
+                  {property.image_url ? (
+                    <img src={property.image_url} alt={property.title} />
+                  ) : (
+                    <div className="public-detail-placeholder">
+                      <Home size={34} />
+                      <span>Imagen no disponible</span>
+                    </div>
+                  )}
+                </div>
+
+                <aside className="public-detail-summary">
+                  <span className="operation-badge">{property.operation_type}</span>
+                  <h2>{property.title}</h2>
+                  <p className="public-detail-location">{getShortLocation()}</p>
+                  <strong className="public-detail-price">{formatCurrency(property.price, property.currency || 'ARS')}</strong>
+                  <p><StatusBadge status={property.status} /></p>
+                  {getFeatureChips().length > 0 ? (
+                    <div className="public-detail-chips">
+                      {getFeatureChips().map((feature) => {
+                        const Icon = feature.icon
+                        return (
+                          <span key={feature.label}>
+                            <Icon size={15} />
+                            {feature.label}
+                          </span>
+                        )
+                      })}
+                    </div>
+                  ) : null}
+                  <p className="public-detail-summary-text">{getDescriptionSummary()}</p>
+                  <div className="public-detail-actions">
+                    <a className="button-link" href="#consulta-propiedad">Consultar por esta propiedad</a>
+                    <Link className="secondary-button" to="/portal">Volver a propiedades</Link>
+                  </div>
+                </aside>
+              </section>
+
+              <section className="public-detail-sections">
+                <article className="public-detail-card">
+                  <h2>Descripción</h2>
+                  <p>{property.description || 'Esta propiedad no tiene descripción adicional por el momento.'}</p>
+                </article>
+
+                <article className="public-detail-card">
+                  <h2>Características del inmueble</h2>
+                  {getPublicFeatures().length > 0 ? (
+                    <div className="public-feature-grid">
+                      {getPublicFeatures().map((feature) => (
+                        <div key={feature.label}>
+                          <span>{feature.label}</span>
+                          <strong>{feature.value}</strong>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p>No hay características adicionales cargadas por el momento.</p>
+                  )}
+                </article>
+
+                <article className="public-detail-card public-contact-card" id="consulta-propiedad">
+                  <h2>¿Te interesa esta propiedad?</h2>
+                  <p>Comunicate con la inmobiliaria para coordinar una visita o solicitar más información.</p>
+                  <Link className="button-link" to="/portal">Ver más propiedades</Link>
+                </article>
+              </section>
+            </>
+          ) : null}
         </main>
       </>
     )
