@@ -762,7 +762,7 @@ h2 {
   box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22);
   display: grid;
   gap: 0.75rem;
-  grid-template-columns: minmax(220px, 1fr) 180px auto;
+  grid-template-columns: minmax(260px, 1fr) 180px;
   margin-top: 1.75rem;
   max-width: 900px;
   padding: 0.85rem;
@@ -782,12 +782,6 @@ h2 {
 .portal-search-card select:focus {
   border-color: #1268f3;
   outline: none;
-}
-
-.portal-search-card button {
-  border-radius: var(--radius-xl);
-  min-height: 48px;
-  padding-inline: 1.25rem;
 }
 
 .portal-results {
@@ -2368,10 +2362,6 @@ h2 {
 
   .portal-search-card {
     grid-template-columns: minmax(220px, 1fr) 160px;
-  }
-
-  .portal-search-card button {
-    grid-column: 1 / -1;
   }
 }
 

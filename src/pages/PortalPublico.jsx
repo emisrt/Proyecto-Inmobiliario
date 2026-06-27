@@ -37,11 +37,6 @@ function PortalPublico() {
     setFilters((currentFilters) => ({ ...currentFilters, [name]: value }))
   }
 
-  function handleSubmit(event) {
-    event.preventDefault()
-    loadProperties()
-  }
-
   const hasActiveFilter = Boolean(filters.search || filters.operationType)
   const operationLabel = filters.operationType ? `Resultados para: ${filters.operationType}` : null
   const panelPath = isAuthenticated ? getRoleHome(profile?.role) : '/login'
@@ -57,25 +52,30 @@ function PortalPublico() {
         <section className="portal-hero">
           <div className="portal-hero-inner">
             <div className="portal-hero-copy">
-              <p className="eyebrow">Vidriera inmobiliaria</p>
-              <h1>Propiedades disponibles de la inmobiliaria</h1>
-              <p>Consultá inmuebles en alquiler y venta publicados por nuestro equipo.</p>
+              <p className="eyebrow">BUSCÁ TU PRÓXIMA PROPIEDAD</p>
+              <h1>Encontrá inmuebles en alquiler o venta</h1>
+              <p>Buscá por ubicación, tipo de propiedad o modalidad y encontrá opciones disponibles de forma rápida y simple.</p>
             </div>
-            <form className="portal-search-card" onSubmit={handleSubmit}>
+            <div className="portal-search-card" role="search" aria-label="Buscar propiedades">
               <input
+                aria-label="Buscar por dirección, ciudad, barrio o tipo de propiedad"
                 name="search"
                 type="search"
                 placeholder="Buscar por dirección, ciudad, barrio o tipo de propiedad"
                 value={filters.search}
                 onChange={handleChange}
               />
-              <select name="operationType" value={filters.operationType} onChange={handleChange}>
-                <option value="">Operación</option>
+              <select
+                aria-label="Seleccionar modalidad"
+                name="operationType"
+                value={filters.operationType}
+                onChange={handleChange}
+              >
+                <option value="">Todos</option>
                 <option value="alquiler">Alquiler</option>
                 <option value="venta">Venta</option>
               </select>
-              <button type="submit">Filtrar</button>
-            </form>
+            </div>
           </div>
         </section>
 
