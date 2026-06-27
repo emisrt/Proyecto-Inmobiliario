@@ -15,6 +15,7 @@ function PropertyDetail({ publicView = false }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
+  const [contactNotice, setContactNotice] = useState(null)
 
   const loadProperty = useCallback(async () => {
     setLoading(true)
@@ -60,6 +61,18 @@ function PropertyDetail({ publicView = false }) {
     return value ? 'Sí' : 'No'
   }
 
+  function formatPublicValue(value) {
+    if (value === null || value === undefined || value === '' || value === 0) {
+      return 'No especificado'
+    }
+
+    return value
+  }
+
+  function formatBoolean(value) {
+    return value ? 'Sí' : 'No'
+  }
+
   function getFeatureChips() {
     if (!property) return []
 
@@ -83,17 +96,19 @@ function PropertyDetail({ publicView = false }) {
     if (!property) return []
 
     return [
-      { label: 'Tipo de inmueble', value: property.property_type },
-      { label: 'Provincia', value: property.province },
-      { label: 'Ciudad', value: property.city },
-      { label: 'Barrio', value: property.neighborhood },
-      { label: 'Superficie total', value: property.total_area ? `${property.total_area} m²` : null },
-      { label: 'Superficie cubierta', value: property.covered_area ? `${property.covered_area} m²` : null },
-      { label: 'Cochera', value: property.has_garage ? 'Sí' : null },
-      { label: 'Patio', value: property.has_yard ? 'Sí' : null },
-      { label: 'Pileta', value: property.has_pool ? 'Sí' : null },
-      { label: 'Mascotas permitidas', value: property.pets_allowed ? 'Sí' : null },
-    ].filter((item) => item.value)
+      { label: 'Tipo de inmueble', value: formatPublicValue(property.property_type) },
+      { label: 'Provincia', value: formatPublicValue(property.province) },
+      { label: 'Ciudad', value: formatPublicValue(property.city) },
+      { label: 'Barrio', value: formatPublicValue(property.neighborhood) },
+      { label: 'Dormitorios', value: formatPublicValue(property.bedrooms) },
+      { label: 'Baños', value: formatPublicValue(property.bathrooms) },
+      { label: 'Superficie total', value: property.total_area ? `${property.total_area} m²` : 'No especificado' },
+      { label: 'Superficie cubierta', value: property.covered_area ? `${property.covered_area} m²` : 'No especificado' },
+      { label: 'Cochera', value: formatBoolean(property.has_garage) },
+      { label: 'Patio', value: formatBoolean(property.has_yard) },
+      { label: 'Pileta', value: formatBoolean(property.has_pool) },
+      { label: 'Mascotas', value: formatBoolean(property.pets_allowed) },
+    ]
   }
 
   const content = (
@@ -210,7 +225,6 @@ function PropertyDetail({ publicView = false }) {
                   <p className="public-detail-summary-text">{getDescriptionSummary()}</p>
                   <div className="public-detail-actions">
                     <a className="button-link" href="#consulta-propiedad">Consultar por esta propiedad</a>
-                    <Link className="secondary-button" to="/portal">Volver a propiedades</Link>
                   </div>
                 </aside>
               </section>
@@ -238,9 +252,18 @@ function PropertyDetail({ publicView = false }) {
                 </article>
 
                 <article className="public-detail-card public-contact-card" id="consulta-propiedad">
-                  <h2>¿Te interesa esta propiedad?</h2>
-                  <p>Comunicate con la inmobiliaria para coordinar una visita o solicitar más información.</p>
-                  <Link className="button-link" to="/portal">Ver más propiedades</Link>
+                  <div>
+                    <h2>¿Te interesa esta propiedad?</h2>
+                    <p>Comunicate con la inmobiliaria para coordinar una visita o solicitar más información.</p>
+                    {contactNotice ? <p className="public-contact-notice">{contactNotice}</p> : null}
+                  </div>
+                  <button
+                    className="button-link"
+                    type="button"
+                    onClick={() => setContactNotice('La funcionalidad de contacto se integrará próximamente.')}
+                  >
+                    Solicitar información
+                  </button>
                 </article>
               </section>
             </>

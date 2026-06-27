@@ -1098,6 +1098,11 @@ h2 {
   top: 96px;
 }
 
+.public-detail-summary .operation-badge {
+  justify-self: start;
+  width: fit-content;
+}
+
 .public-detail-summary h2 {
   color: #0f172a;
   font-size: 1.45rem;
@@ -1209,6 +1214,20 @@ h2 {
   display: flex;
   gap: 1rem;
   justify-content: space-between;
+}
+
+.public-contact-card .button-link {
+  flex-shrink: 0;
+}
+
+.public-contact-notice {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 14px;
+  color: #1d4ed8 !important;
+  font-weight: 800;
+  margin-top: 0.85rem !important;
+  padding: 0.75rem 0.85rem;
 }
 
 .detail-image {
