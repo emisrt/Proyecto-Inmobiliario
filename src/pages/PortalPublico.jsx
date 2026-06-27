@@ -46,6 +46,10 @@ function PortalPublico() {
   const operationLabel = filters.operationType ? `Resultados para: ${filters.operationType}` : null
   const panelPath = isAuthenticated ? getRoleHome(profile?.role) : '/login'
 
+  function getLocation(property) {
+    return [property.neighborhood, property.city, property.province].filter(Boolean).join(', ')
+  }
+
   return (
     <>
       <PublicHeader />
@@ -112,9 +116,15 @@ function PortalPublico() {
                   )}
                   <span className="operation-badge">{property.operation_type}</span>
                   <h2>{property.title}</h2>
-                  <p>{property.address}{property.city ? `, ${property.city}` : ''}</p>
+                  <p>{getLocation(property) || property.address}</p>
+                  <div className="property-card-features">
+                    <span>{property.property_type}</span>
+                    <span>{property.bedrooms || 0} dorm.</span>
+                    <span>{property.bathrooms || 0} baños</span>
+                    {property.total_area ? <span>{property.total_area} m²</span> : null}
+                  </div>
                   <p><StatusBadge status={property.status} /></p>
-                  <strong className="property-price">{formatCurrency(property.price)}</strong>
+                  <strong className="property-price">{formatCurrency(property.price, property.currency || 'ARS')}</strong>
                 </Link>
               ))}
             </section>

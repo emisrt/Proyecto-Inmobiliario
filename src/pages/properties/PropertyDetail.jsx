@@ -47,6 +47,14 @@ function PropertyDetail({ publicView = false }) {
     }
   }
 
+  function getLocation() {
+    return [property.address, property.neighborhood, property.city, property.province].filter(Boolean).join(', ')
+  }
+
+  function yesNo(value) {
+    return value ? 'Sí' : 'No'
+  }
+
   const content = (
     <section className="panel dashboard-section">
       {loading ? <p className="muted">Cargando propiedad...</p> : null}
@@ -62,12 +70,25 @@ function PropertyDetail({ publicView = false }) {
           <div>
             <p className="eyebrow">{property.operation_type}</p>
             <h2>{property.title}</h2>
-            <p className="muted">{property.address}{property.city ? `, ${property.city}` : ''}</p>
-            <strong className="detail-price">{formatCurrency(property.price)}</strong>
+            <p className="muted">{getLocation()}</p>
+            <strong className="detail-price">{formatCurrency(property.price, property.currency || 'ARS')}</strong>
             <p><StatusBadge status={property.status} /></p>
+            <div className="property-feature-list">
+              <span>{property.bedrooms || 0} dorm.</span>
+              <span>{property.bathrooms || 0} baños</span>
+              {property.total_area ? <span>{property.total_area} m² totales</span> : null}
+              {property.covered_area ? <span>{property.covered_area} m² cubiertos</span> : null}
+            </div>
             <p>{property.description || 'Sin descripcion cargada.'}</p>
             <dl className="detail-list">
               <div><dt>Tipo</dt><dd>{property.property_type}</dd></div>
+              <div><dt>Provincia</dt><dd>{property.province || '-'}</dd></div>
+              <div><dt>Ciudad</dt><dd>{property.city || '-'}</dd></div>
+              <div><dt>Barrio</dt><dd>{property.neighborhood || '-'}</dd></div>
+              <div><dt>Cochera</dt><dd>{yesNo(property.has_garage)}</dd></div>
+              <div><dt>Patio</dt><dd>{yesNo(property.has_yard)}</dd></div>
+              <div><dt>Pileta</dt><dd>{yesNo(property.has_pool)}</dd></div>
+              <div><dt>Mascotas</dt><dd>{yesNo(property.pets_allowed)}</dd></div>
               <div><dt>Propietario</dt><dd>{property.owner?.full_name || property.owner_id || '-'}</dd></div>
               <div><dt>Agente</dt><dd>{property.agent?.full_name || property.agent_id || '-'}</dd></div>
             </dl>

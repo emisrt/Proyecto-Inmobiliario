@@ -31,6 +31,10 @@ function PropertyList() {
     loadProperties()
   }, [])
 
+  function getLocation(property) {
+    return [property.address, property.neighborhood, property.city, property.province].filter(Boolean).join(', ')
+  }
+
   return (
     <DashboardLayout title="Propiedades" role="Inmobiliaria">
       <section className="panel dashboard-section">
@@ -47,8 +51,9 @@ function PropertyList() {
             <thead>
               <tr>
                 <th>Propiedad</th>
-                <th>Direccion</th>
+                <th>Ubicación</th>
                 <th>Operacion</th>
+                <th>Tipo</th>
                 <th>Precio</th>
                 <th>Estado</th>
                 <th aria-label="Acciones" />
@@ -57,7 +62,7 @@ function PropertyList() {
             <tbody>
               {properties.length === 0 ? (
                 <tr>
-                  <td colSpan="6">No hay propiedades registradas.</td>
+                  <td colSpan="7">No hay propiedades registradas.</td>
                 </tr>
               ) : (
                 properties.map((property) => (
@@ -74,9 +79,10 @@ function PropertyList() {
                     }}
                   >
                     <td>{property.title}</td>
-                    <td>{property.address}{property.city ? `, ${property.city}` : ''}</td>
+                    <td>{getLocation(property)}</td>
                     <td>{property.operation_type}</td>
-                    <td>{formatCurrency(property.price)}</td>
+                    <td>{property.property_type}</td>
+                    <td>{formatCurrency(property.price, property.currency || 'ARS')}</td>
                     <td><StatusBadge status={property.status} /></td>
                     <td className="row-menu-cell" onClick={(event) => event.stopPropagation()}>
                       <div className="context-menu">

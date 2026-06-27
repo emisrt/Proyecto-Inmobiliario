@@ -1,9 +1,9 @@
-export function formatCurrency(value) {
+export function formatCurrency(value, currency = 'ARS') {
   if (value === null || value === undefined) return '-'
 
   return new Intl.NumberFormat('es-AR', {
     style: 'currency',
-    currency: 'ARS',
+    currency,
     maximumFractionDigits: 0,
   }).format(Number(value))
 }

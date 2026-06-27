@@ -29,16 +29,28 @@ create table if not exists public.properties (
   operation_type text not null,
   property_type text not null,
   price numeric(12, 2) not null default 0,
+  currency text not null default 'ARS',
   status text not null default 'disponible',
   description text,
   owner_id uuid references public.profiles(id) on delete set null,
   agent_id uuid references public.profiles(id) on delete set null,
   image_url text,
+  province text,
+  neighborhood text,
+  bedrooms integer not null default 0,
+  bathrooms integer not null default 0,
+  total_area numeric,
+  covered_area numeric,
+  has_garage boolean not null default false,
+  has_yard boolean not null default false,
+  has_pool boolean not null default false,
+  pets_allowed boolean not null default false,
   created_at timestamp with time zone not null default now(),
   constraint properties_operation_type_check check (operation_type in ('alquiler', 'venta')),
   constraint properties_property_type_check check (
-    property_type in ('casa', 'departamento', 'local', 'terreno', 'oficina')
+    property_type in ('casa', 'departamento', 'local', 'terreno', 'oficina', 'galpon', 'quinta', 'otro')
   ),
+  constraint properties_currency_check check (currency in ('ARS', 'USD')),
   constraint properties_status_check check (
     status in (
       'registrada',
@@ -51,7 +63,16 @@ create table if not exists public.properties (
       'anulada'
     )
   ),
-  constraint properties_price_check check (price >= 0)
+  constraint properties_price_check check (price >= 0),
+  constraint properties_bedrooms_check check (bedrooms >= 0),
+  constraint properties_bathrooms_check check (bathrooms >= 0),
+  constraint properties_total_area_check check (total_area is null or total_area >= 0),
+  constraint properties_covered_area_check check (covered_area is null or covered_area >= 0),
+  constraint properties_area_order_check check (
+    total_area is null
+    or covered_area is null
+    or covered_area <= total_area
+  )
 );
 
 create table if not exists public.contracts (
