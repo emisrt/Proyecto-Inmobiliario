@@ -50,11 +50,18 @@ function PortalPublico() {
       <PublicHeader />
       <main className="public-portal">
         <section className="portal-hero">
+          <img
+            aria-hidden="true"
+            className="portal-hero-watermark"
+            src="/locative-mark.png"
+            alt=""
+          />
           <div className="portal-hero-inner">
             <div className="portal-hero-copy">
               <p className="eyebrow">BUSCÁ TU PRÓXIMA PROPIEDAD</p>
               <h1>Encontrá inmuebles en alquiler o venta</h1>
               <p>Buscá por ubicación, tipo de propiedad o modalidad y encontrá opciones disponibles de forma rápida y simple.</p>
+              <span className="portal-hero-tags">Alquileres · Ventas · Casas · Departamentos</span>
             </div>
             <div className="portal-search-card" role="search" aria-label="Buscar propiedades">
               <input
