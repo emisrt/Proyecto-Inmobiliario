@@ -4,7 +4,7 @@ import { supabase } from '../services/supabaseClient'
 import { toUserErrorMessage } from '../utils/userMessages'
 import { AuthContext } from './authContextValue'
 
-const publicDemoRoles = ['inquilino', 'propietario', 'profesional', 'visitante']
+const publicDemoRoles = ['agente_inmobiliario', 'inquilino', 'propietario', 'profesional', 'visitante']
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)

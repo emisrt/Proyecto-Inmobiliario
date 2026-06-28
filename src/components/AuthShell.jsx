@@ -3,14 +3,25 @@ import { Link } from 'react-router-dom'
 import { agencyConfig } from '../config/agencyConfig'
 import BrandLogo from './BrandLogo'
 
-const valueItems = [
+const defaultValueItems = [
   { label: 'Propiedades', icon: Building2 },
   { label: 'Contratos', icon: FileText },
   { label: 'Pagos', icon: CreditCard },
   { label: 'Arreglos', icon: Wrench },
 ]
 
-function AuthShell({ eyebrow, title, description, children, footer, showValuePanel = false }) {
+function AuthShell({
+  eyebrow,
+  title,
+  description,
+  children,
+  footer,
+  showValuePanel = false,
+  valuePanelEyebrow = agencyConfig.systemName,
+  valuePanelTitle = 'Gestioná tus alquileres en un solo lugar',
+  valuePanelDescription = `Centralizá propiedades, contratos, pagos, arreglos y profesionales de ${agencyConfig.name} desde un sistema simple e integral.`,
+  valuePanelItems = defaultValueItems,
+}) {
   return (
     <div className="auth-shell">
       <header className="auth-brand-bar">
@@ -28,13 +39,11 @@ function AuthShell({ eyebrow, title, description, children, footer, showValuePan
         <div className={`auth-layout${showValuePanel ? ' auth-layout-split' : ''}`}>
           {showValuePanel ? (
             <section className="auth-value-panel" aria-label={`Beneficios de ${agencyConfig.systemName}`}>
-              <p className="eyebrow">{agencyConfig.systemName}</p>
-              <h1>Gestioná tus alquileres en un solo lugar</h1>
-              <p>
-                Centralizá propiedades, contratos, pagos, arreglos y profesionales de {agencyConfig.name} desde un sistema simple e integral.
-              </p>
+              <p className="eyebrow">{valuePanelEyebrow}</p>
+              <h1>{valuePanelTitle}</h1>
+              <p>{valuePanelDescription}</p>
               <div className="auth-value-grid">
-                {valueItems.map((item) => {
+                {valuePanelItems.map((item) => {
                   const Icon = item.icon
 
                   return (
