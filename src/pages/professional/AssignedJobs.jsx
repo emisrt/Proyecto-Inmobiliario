@@ -4,6 +4,7 @@ import SimpleTable from '../../components/SimpleTable'
 import StatusBadge from '../../components/StatusBadge'
 import { useAuth } from '../../context/useAuth'
 import { listAssignedRepairs } from '../../services/repairService'
+import { toUserErrorMessage } from '../../utils/userMessages'
 
 function AssignedJobs() {
   const { user } = useAuth()
@@ -22,7 +23,7 @@ function AssignedJobs() {
         const data = await listAssignedRepairs(user.id)
         if (isMounted) setJobs(data)
       } catch (jobError) {
-        if (isMounted) setError(jobError.message)
+        if (isMounted) setError(toUserErrorMessage(jobError, 'No se pudieron cargar tus trabajos asignados.'))
       } finally {
         if (isMounted) setLoading(false)
       }
@@ -48,7 +49,12 @@ function AssignedJobs() {
       <section className="panel dashboard-section">
         {loading ? <p className="loading-feedback">Cargando trabajos asignados...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}
-        <SimpleTable columns={columns} rows={jobs} emptyMessage="No tenes trabajos asignados." />
+        <SimpleTable
+          columns={columns}
+          rows={jobs}
+          emptyMessage="No tenés trabajos asignados."
+          emptyDescription="Cuando la inmobiliaria acepte una postulación tuya, el trabajo aparecerá en esta sección."
+        />
       </section>
     </DashboardLayout>
   )

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { agencyConfig } from '../config/agencyConfig'
 import { supabase } from '../services/supabaseClient'
+import { toUserErrorMessage } from '../utils/userMessages'
 import { AuthContext } from './authContextValue'
 
 const publicDemoRoles = ['inquilino', 'propietario', 'profesional', 'visitante']
@@ -22,7 +23,7 @@ export function AuthProvider({ children }) {
       .maybeSingle()
 
     if (profileError) {
-      setError(profileError.message)
+      setError(toUserErrorMessage(profileError, 'No se pudo cargar el perfil del usuario.'))
       setProfile(null)
       return null
     }
@@ -54,7 +55,7 @@ export function AuthProvider({ children }) {
       if (!isMounted) return
 
       if (sessionError) {
-        setError(sessionError.message)
+        setError(toUserErrorMessage(sessionError, 'No se pudo recuperar la sesión.'))
       }
 
       setSession(activeSession)
@@ -113,7 +114,7 @@ export function AuthProvider({ children }) {
     })
 
     if (loginError) {
-      setError(loginError.message)
+      setError(toUserErrorMessage(loginError, 'No se pudo iniciar sesión.'))
       setLoading(false)
       return { data, error: loginError, profile: null }
     }
@@ -154,7 +155,7 @@ export function AuthProvider({ children }) {
     })
 
     if (registerError) {
-      setError(registerError.message)
+      setError(toUserErrorMessage(registerError, 'No se pudo crear la cuenta de prueba.'))
       setLoading(false)
       return { data, error: registerError, profile: null }
     }
@@ -176,7 +177,7 @@ export function AuthProvider({ children }) {
     const { error: logoutError } = await supabase.auth.signOut()
 
     if (logoutError) {
-      setError(logoutError.message)
+      setError(toUserErrorMessage(logoutError, 'No se pudo cerrar sesión.'))
       setLoading(false)
       return { error: logoutError }
     }

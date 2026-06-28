@@ -7,6 +7,7 @@ import { useAuth } from '../context/useAuth'
 import { listPublicProperties } from '../services/propertyService'
 import { formatCurrency } from '../utils/formatters'
 import { getRoleHome } from '../utils/roles'
+import { toUserErrorMessage } from '../utils/userMessages'
 
 function PortalPublico() {
   const { isAuthenticated, profile } = useAuth()
@@ -23,7 +24,7 @@ function PortalPublico() {
       const data = await listPublicProperties(filters)
       setProperties(data)
     } catch (propertyError) {
-      setError(propertyError.message)
+      setError(toUserErrorMessage(propertyError, 'No se pudieron cargar las propiedades publicadas.'))
     } finally {
       setLoading(false)
     }

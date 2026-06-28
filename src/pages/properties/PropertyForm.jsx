@@ -4,6 +4,7 @@ import DashboardLayout from '../../components/DashboardLayout'
 import { useAuth } from '../../context/useAuth'
 import { citiesByProvince, provinces } from '../../data/argentinaLocations'
 import { getInitialPropertyStatus, getProperty, listPropertyOwners, saveProperty } from '../../services/propertyService'
+import { toUserErrorMessage } from '../../utils/userMessages'
 
 const initialValues = {
   title: '',
@@ -110,7 +111,7 @@ function PropertyForm() {
         const data = await listPropertyOwners()
         if (isMounted) setOwners(data)
       } catch (ownerError) {
-        if (isMounted) setError(ownerError.message)
+        if (isMounted) setError(toUserErrorMessage(ownerError, 'No se pudo cargar el listado de propietarios.'))
       } finally {
         if (isMounted) setOwnersLoading(false)
       }
@@ -161,7 +162,7 @@ function PropertyForm() {
           pets_allowed: Boolean(property.pets_allowed),
         })
       } catch (propertyError) {
-        if (isMounted) setError(propertyError.message)
+        if (isMounted) setError(toUserErrorMessage(propertyError, 'No se pudo cargar la propiedad.'))
       } finally {
         if (isMounted) setLoading(false)
       }
@@ -221,7 +222,7 @@ function PropertyForm() {
       setSuccess('Propiedad guardada correctamente.')
       setTimeout(() => navigate(`/inmobiliaria/propiedades/${savedProperty.id}`), 500)
     } catch (saveError) {
-      setError(saveError.message)
+      setError(toUserErrorMessage(saveError, 'No se pudo guardar la propiedad.'))
     } finally {
       setSaving(false)
     }

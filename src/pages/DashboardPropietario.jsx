@@ -7,6 +7,7 @@ import StatusBadge from '../components/StatusBadge'
 import { useAuth } from '../context/useAuth'
 import { getOwnerDashboard } from '../services/ownerService'
 import { formatCurrency, formatDate, formatDisplayText } from '../utils/formatters'
+import { toUserErrorMessage } from '../utils/userMessages'
 
 function getPropertyLabel(property) {
   return [property?.title, property?.address].filter(Boolean).join(' · ') || 'Propiedad no especificada'
@@ -47,7 +48,7 @@ function DashboardPropietario({ view = 'overview' }) {
         const data = await getOwnerDashboard(user.id)
         if (isMounted) setDashboardData(data)
       } catch (dashboardError) {
-        if (isMounted) setError(dashboardError.message)
+        if (isMounted) setError(toUserErrorMessage(dashboardError, 'No se pudo cargar la información del propietario.'))
       } finally {
         if (isMounted) setLoading(false)
       }
@@ -82,7 +83,7 @@ function DashboardPropietario({ view = 'overview' }) {
     {
       header: 'Detalle',
       key: 'detail',
-      render: (property) => <Link to={`/portal/propiedades/${property.id}`}>Ver detalle</Link>,
+      render: (property) => <Link to={`/portal/propiedades/${property.id}`}>Ver propiedad</Link>,
     },
   ]
 
@@ -155,6 +156,7 @@ function DashboardPropietario({ view = 'overview' }) {
             columns={propertyColumns}
             rows={dashboardData.properties}
             emptyMessage="No tenés propiedades asociadas por el momento."
+            emptyDescription="Cuando la inmobiliaria asocie una propiedad a tu usuario, vas a verla en esta sección."
           />
         </section>
       ) : null}
@@ -166,6 +168,7 @@ function DashboardPropietario({ view = 'overview' }) {
             columns={contractColumns}
             rows={dashboardData.contracts}
             emptyMessage="No hay contratos activos."
+            emptyDescription="Los contratos de tus propiedades administradas aparecerán acá."
           />
         </section>
       ) : null}
@@ -177,6 +180,7 @@ function DashboardPropietario({ view = 'overview' }) {
             columns={paymentColumns}
             rows={dashboardData.payments}
             emptyMessage="No hay pagos pendientes."
+            emptyDescription="Los pagos asociados a contratos de tus propiedades se listarán en esta sección."
           />
         </section>
       ) : null}
@@ -188,6 +192,7 @@ function DashboardPropietario({ view = 'overview' }) {
             columns={repairColumns}
             rows={dashboardData.repairs}
             emptyMessage="No hay arreglos en curso."
+            emptyDescription="Las solicitudes de arreglo vinculadas a tus propiedades aparecerán acá."
           />
         </section>
       ) : null}

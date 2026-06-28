@@ -5,6 +5,7 @@ import SimpleTable from '../../components/SimpleTable'
 import StatusBadge from '../../components/StatusBadge'
 import { listAgentRepairs, updateRepairStatus } from '../../services/repairService'
 import { formatDate } from '../../utils/formatters'
+import { toUserErrorMessage } from '../../utils/userMessages'
 
 function normalizeRepairStatus(status) {
   if (status === 'publicada') return 'publicado'
@@ -29,7 +30,7 @@ function AgentRepairList() {
       const data = await listAgentRepairs({ status: nextStatus })
       setRepairs(data)
     } catch (repairError) {
-      setError(repairError.message)
+      setError(toUserErrorMessage(repairError, 'No se pudieron cargar las solicitudes de arreglo.'))
     } finally {
       setLoading(false)
     }
@@ -46,7 +47,13 @@ function AgentRepairList() {
   }
 
   async function changeRepairStatus(repair, nextStatus) {
-    const shouldContinue = window.confirm('¿Confirmás el cambio de estado de esta solicitud?')
+    const actionLabels = {
+      publicado: 'publicar este arreglo para profesionales',
+      pendiente_confirmacion: 'marcar este arreglo como pendiente de confirmación',
+      resuelto: 'marcar este arreglo como resuelto',
+      cancelado: 'cancelar este arreglo',
+    }
+    const shouldContinue = window.confirm(`¿Confirmás que querés ${actionLabels[nextStatus] || 'cambiar el estado de esta solicitud'}?`)
     if (!shouldContinue) return
 
     setSavingId(repair.id)
@@ -55,10 +62,10 @@ function AgentRepairList() {
 
     try {
       await updateRepairStatus(repair.id, nextStatus)
-      setSuccess('Estado de solicitud actualizado.')
+      setSuccess('Estado de la solicitud actualizado.')
       await loadRepairs()
     } catch (statusError) {
-      setError(statusError.message)
+      setError(toUserErrorMessage(statusError, 'No se pudo actualizar la solicitud.'))
     } finally {
       setSavingId(null)
     }
@@ -71,7 +78,7 @@ function AgentRepairList() {
       return (
         <div className="table-actions">
           <button type="button" disabled={savingId === repair.id} onClick={() => changeRepairStatus(repair, 'publicado')}>
-            Publicar
+            Publicar arreglo
           </button>
           <Link to={`/inmobiliaria/arreglos/${repair.id}`}>Gestionar</Link>
         </div>

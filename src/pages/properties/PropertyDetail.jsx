@@ -30,6 +30,7 @@ import {
   updatePropertyStatus,
 } from '../../services/propertyService'
 import { formatCurrency, formatDate } from '../../utils/formatters'
+import { toUserErrorMessage } from '../../utils/userMessages'
 
 const assignableRentalStatuses = ['disponible', 'disponible_alquiler']
 const blockedAssignmentStatuses = ['vendida', 'anulada', 'suspendida']
@@ -76,7 +77,7 @@ function PropertyDetail({ publicView = false }) {
         setContract(contractData)
       }
     } catch (propertyError) {
-      setError(propertyError.message)
+      setError(toUserErrorMessage(propertyError, 'No se pudo cargar la propiedad.'))
     } finally {
       setLoading(false)
       setContractLoading(false)
@@ -97,7 +98,7 @@ function PropertyDetail({ publicView = false }) {
       setProperty(data)
       setSuccess('Estado actualizado.')
     } catch (statusError) {
-      setError(statusError.message)
+      setError(toUserErrorMessage(statusError, 'No se pudo actualizar el estado de la propiedad.'))
     } finally {
       setStatusLoading(false)
       setStatusToConfirm(null)
@@ -150,7 +151,7 @@ function PropertyDetail({ publicView = false }) {
         setDeleteSummary(deletePropertyError.summary)
       }
       setDeleteError(
-        deletePropertyError.message
+        toUserErrorMessage(deletePropertyError, 'No se pudo eliminar la propiedad. Verificá que no tenga información asociada.')
         || 'No se pudo eliminar la propiedad. Verificá que no tenga información asociada.',
       )
       setDeleteLoading(false)

@@ -6,6 +6,7 @@ import StatusBadge from '../../components/StatusBadge'
 import { useAuth } from '../../context/useAuth'
 import { listTenantRepairs } from '../../services/repairService'
 import { formatDate } from '../../utils/formatters'
+import { toUserErrorMessage } from '../../utils/userMessages'
 
 function TenantRepairList() {
   const { user } = useAuth()
@@ -24,7 +25,7 @@ function TenantRepairList() {
         const data = await listTenantRepairs(user.id)
         if (isMounted) setRepairs(data)
       } catch (repairError) {
-        if (isMounted) setError(repairError.message)
+        if (isMounted) setError(toUserErrorMessage(repairError, 'No se pudieron cargar tus solicitudes de arreglo.'))
       } finally {
         if (isMounted) setLoading(false)
       }
@@ -44,7 +45,7 @@ function TenantRepairList() {
     { header: 'Prioridad', key: 'priority', render: (repair) => <StatusBadge status={repair.priority} /> },
     { header: 'Estado', key: 'status', render: (repair) => <StatusBadge status={repair.status} /> },
     { header: 'Fecha', key: 'created_at', render: (repair) => formatDate(repair.created_at?.slice(0, 10)) },
-    { header: 'Acciones', key: 'actions', render: (repair) => <Link to={`/inquilino/arreglos/${repair.id}`}>Ver</Link> },
+    { header: 'Acciones', key: 'actions', render: (repair) => <Link to={`/inquilino/arreglos/${repair.id}`}>Ver solicitud</Link> },
   ]
 
   return (
@@ -58,7 +59,13 @@ function TenantRepairList() {
         </div>
         {loading ? <p className="loading-feedback">Cargando solicitudes...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}
-        <SimpleTable columns={columns} rows={repairs} emptyMessage="Todavia no cargaste solicitudes." />
+        <SimpleTable
+          columns={columns}
+          rows={repairs}
+          emptyMessage="Todavía no cargaste solicitudes."
+          emptyDescription="Si necesitás reportar un problema en la propiedad, creá una solicitud para la inmobiliaria."
+          emptyAction={<Link className="button-link" to="/inquilino/arreglos/nuevo">Solicitar arreglo</Link>}
+        />
       </section>
     </DashboardLayout>
   )

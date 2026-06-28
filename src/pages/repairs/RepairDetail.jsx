@@ -5,6 +5,7 @@ import StatusBadge from '../../components/StatusBadge'
 import { agencyConfig } from '../../config/agencyConfig'
 import { getRepair, updateRepairByAgent } from '../../services/repairService'
 import { formatDate } from '../../utils/formatters'
+import { toUserErrorMessage } from '../../utils/userMessages'
 
 function RepairDetail({ mode = 'tenant' }) {
   const { id } = useParams()
@@ -36,7 +37,7 @@ function RepairDetail({ mode = 'tenant' }) {
         agent_notes: data.agent_notes || '',
       })
     } catch (repairError) {
-      setError(repairError.message)
+      setError(toUserErrorMessage(repairError, 'No se pudo cargar la solicitud de arreglo.'))
     } finally {
       setLoading(false)
     }
@@ -53,6 +54,12 @@ function RepairDetail({ mode = 'tenant' }) {
 
   async function handleSubmit(event) {
     event.preventDefault()
+    if (['cancelado', 'resuelto'].includes(form.status) && form.status !== repair?.status) {
+      const label = form.status === 'cancelado' ? 'cancelar este arreglo' : 'marcar este arreglo como resuelto'
+      const shouldContinue = window.confirm(`¿Confirmás que querés ${label}?`)
+      if (!shouldContinue) return
+    }
+
     setSaving(true)
     setError(null)
     setSuccess(null)
@@ -62,7 +69,7 @@ function RepairDetail({ mode = 'tenant' }) {
       setRepair(data)
       setSuccess('Solicitud actualizada.')
     } catch (repairError) {
-      setError(repairError.message)
+      setError(toUserErrorMessage(repairError, 'No se pudo guardar la solicitud.'))
     } finally {
       setSaving(false)
     }

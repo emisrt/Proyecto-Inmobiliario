@@ -6,6 +6,7 @@ import StatusBadge from '../../components/StatusBadge'
 import { acceptApplication, listRepairApplications, rejectApplication } from '../../services/professionalService'
 import { getRepair } from '../../services/repairService'
 import { formatCurrency, formatDate, formatDisplayText } from '../../utils/formatters'
+import { toUserErrorMessage } from '../../utils/userMessages'
 
 function RepairApplications() {
   const { id } = useParams()
@@ -28,7 +29,7 @@ function RepairApplications() {
       setRepair(repairData)
       setApplications(applicationData)
     } catch (applicationError) {
-      setError(applicationError.message)
+      setError(toUserErrorMessage(applicationError, 'No se pudieron cargar las postulaciones.'))
     } finally {
       setLoading(false)
     }
@@ -48,10 +49,10 @@ function RepairApplications() {
 
     try {
       await acceptApplication(application)
-      setSuccess('Postulacion aceptada. El arreglo paso a en proceso.')
+      setSuccess('Postulación aceptada. El arreglo pasó a en proceso.')
       await loadData()
     } catch (applicationError) {
-      setError(applicationError.message)
+      setError(toUserErrorMessage(applicationError, 'No se pudo aceptar la postulación.'))
     } finally {
       setSaving(false)
     }
@@ -67,10 +68,10 @@ function RepairApplications() {
 
     try {
       await rejectApplication(applicationId)
-      setSuccess('Postulacion rechazada.')
+      setSuccess('Postulación rechazada.')
       await loadData()
     } catch (applicationError) {
-      setError(applicationError.message)
+      setError(toUserErrorMessage(applicationError, 'No se pudo rechazar la postulación.'))
     } finally {
       setSaving(false)
     }
@@ -91,10 +92,10 @@ function RepairApplications() {
       render: (application) => (
         <div className="table-actions">
           <button type="button" disabled={saving || application.status === 'aceptada'} onClick={() => handleAccept(application)}>
-            Aceptar
+            Aceptar postulación
           </button>
           <button type="button" disabled={saving || application.status === 'rechazada'} onClick={() => handleReject(application.id)}>
-            Rechazar
+            Rechazar postulación
           </button>
         </div>
       ),
@@ -117,7 +118,12 @@ function RepairApplications() {
             <Link to={`/inmobiliaria/arreglos/${repair.id}`}>Volver al arreglo</Link>
           </div>
         ) : null}
-        <SimpleTable columns={columns} rows={applications} emptyMessage="Este arreglo no tiene postulaciones." />
+        <SimpleTable
+          columns={columns}
+          rows={applications}
+          emptyMessage="No hay postulaciones para este arreglo."
+          emptyDescription="Cuando un profesional se postule, vas a poder revisarlo y asignar el trabajo desde acá."
+        />
       </section>
     </DashboardLayout>
   )

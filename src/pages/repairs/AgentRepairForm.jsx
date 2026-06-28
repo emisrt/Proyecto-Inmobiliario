@@ -7,6 +7,7 @@ import {
   getActiveContractByProperty,
   listRepairProperties,
 } from '../../services/repairService'
+import { toUserErrorMessage } from '../../utils/userMessages'
 
 const initialValues = {
   property_id: '',
@@ -43,7 +44,7 @@ function AgentRepairForm() {
         const data = await listRepairProperties(user.id)
         if (isMounted) setProperties(data)
       } catch (propertyError) {
-        if (isMounted) setError(propertyError.message)
+        if (isMounted) setError(toUserErrorMessage(propertyError, 'No se pudieron cargar las propiedades.'))
       } finally {
         if (isMounted) setLoading(false)
       }
@@ -75,7 +76,7 @@ function AgentRepairForm() {
         tenant_id: contract?.tenant_id || '',
       }))
     } catch (contractError) {
-      setError(contractError.message)
+      setError(toUserErrorMessage(contractError, 'No se pudo validar el contrato activo.'))
     } finally {
       setCheckingContract(false)
     }
@@ -116,7 +117,7 @@ function AgentRepairForm() {
       setSuccess('Solicitud creada correctamente.')
       setTimeout(() => navigate(`/inmobiliaria/arreglos/${repairId}`), 800)
     } catch (repairError) {
-      setError(repairError.message)
+      setError(toUserErrorMessage(repairError, 'No se pudo crear la solicitud de arreglo.'))
     } finally {
       setSaving(false)
     }
@@ -191,7 +192,7 @@ function AgentRepairForm() {
           </label>
           <div className="form-actions full-row">
             <button type="submit" disabled={saving}>
-              {saving ? 'Creando...' : 'Crear solicitud'}
+              {saving ? 'Creando...' : 'Crear solicitud de arreglo'}
             </button>
             <button type="button" className="secondary-button" onClick={() => navigate('/inmobiliaria/arreglos')}>
               Cancelar

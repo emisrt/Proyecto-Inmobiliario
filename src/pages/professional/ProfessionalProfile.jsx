@@ -20,6 +20,7 @@ import {
   professionalSpecialties,
   saveProfessionalProfile,
 } from '../../services/professionalService'
+import { toUserErrorMessage } from '../../utils/userMessages'
 
 const initialValues = {
   full_name: '',
@@ -138,7 +139,7 @@ function ProfessionalProfile() {
           availability_notes: profileData?.availability_notes || '',
         })
       } catch (profileError) {
-        if (isMounted) setError(profileError.message)
+        if (isMounted) setError(toUserErrorMessage(profileError, 'No se pudo cargar el perfil profesional.'))
       } finally {
         if (isMounted) setLoading(false)
       }
@@ -220,7 +221,7 @@ function ProfessionalProfile() {
       setIsEditing(false)
       setSuccess('Perfil profesional guardado.')
     } catch (profileError) {
-      setError(profileError.message)
+      setError(toUserErrorMessage(profileError, 'No se pudo guardar el perfil profesional.'))
     } finally {
       setSaving(false)
     }

@@ -6,6 +6,7 @@ import { useAuth } from '../../context/useAuth'
 import { applyToRepair, getApplicationForRepair } from '../../services/professionalService'
 import { getRepair } from '../../services/repairService'
 import { formatCurrency, formatDate } from '../../utils/formatters'
+import { toUserErrorMessage } from '../../utils/userMessages'
 
 function AvailableRepairDetail() {
   const { id } = useParams()
@@ -30,7 +31,7 @@ function AvailableRepairDetail() {
       setRepair(repairData)
       setApplication(applicationData)
     } catch (repairError) {
-      setError(repairError.message)
+      setError(toUserErrorMessage(repairError, 'No se pudo cargar el arreglo disponible.'))
     } finally {
       setLoading(false)
     }
@@ -56,6 +57,9 @@ function AvailableRepairDetail() {
       return
     }
 
+    const shouldContinue = window.confirm('¿Confirmás que querés postularte a este trabajo?')
+    if (!shouldContinue) return
+
     setSaving(true)
     setError(null)
     setSuccess(null)
@@ -63,9 +67,9 @@ function AvailableRepairDetail() {
     try {
       const result = await applyToRepair(id, user.id, values)
       setApplication(result.data)
-      setSuccess(result.alreadyApplied ? 'Ya estabas postulado a este arreglo.' : 'Postulacion enviada.')
+      setSuccess(result.alreadyApplied ? 'Ya estabas postulado a este arreglo.' : 'Postulación enviada correctamente.')
     } catch (applicationError) {
-      setError(applicationError.message)
+      setError(toUserErrorMessage(applicationError, 'No se pudo enviar la postulación.'))
     } finally {
       setSaving(false)
     }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../components/DashboardLayout'
 import { useAuth } from '../../context/useAuth'
 import { createTenantRepair, getActiveTenantContract } from '../../services/repairService'
+import { toUserErrorMessage } from '../../utils/userMessages'
 
 const initialValues = {
   title: '',
@@ -31,7 +32,7 @@ function RepairForm() {
         const activeContract = await getActiveTenantContract(user.id)
         if (isMounted) setContract(activeContract)
       } catch (contractError) {
-        if (isMounted) setError(contractError.message)
+        if (isMounted) setError(toUserErrorMessage(contractError, 'No se pudo buscar tu contrato activo.'))
       } finally {
         if (isMounted) setLoading(false)
       }
@@ -64,7 +65,7 @@ function RepairForm() {
       const repair = await createTenantRepair(user.id, values)
       navigate(`/inquilino/arreglos/${repair.id}`)
     } catch (repairError) {
-      setError(repairError.message)
+      setError(toUserErrorMessage(repairError, 'No se pudo crear la solicitud de arreglo.'))
     } finally {
       setSaving(false)
     }
@@ -112,7 +113,7 @@ function RepairForm() {
           </label>
           <div className="form-actions">
             <button type="submit" disabled={saving || !contract}>
-              {saving ? 'Enviando...' : 'Crear solicitud'}
+              {saving ? 'Enviando...' : 'Crear solicitud de arreglo'}
             </button>
             <button type="button" className="secondary-button" onClick={() => navigate('/inquilino/arreglos')}>
               Cancelar

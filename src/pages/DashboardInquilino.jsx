@@ -7,6 +7,7 @@ import StatusBadge from '../components/StatusBadge'
 import { useAuth } from '../context/useAuth'
 import { supabase } from '../services/supabaseClient'
 import { formatCurrency, formatDate } from '../utils/formatters'
+import { toUserErrorMessage } from '../utils/userMessages'
 
 const paymentColumns = [
   { header: 'Monto', key: 'amount', render: (payment) => formatCurrency(payment.amount) },
@@ -87,7 +88,7 @@ function DashboardInquilino() {
         setPayments(paymentsResult.data || [])
         setRepairs(repairsResult.data || [])
       } catch (dashboardError) {
-        if (isMounted) setError(dashboardError.message)
+        if (isMounted) setError(toUserErrorMessage(dashboardError, 'No se pudo cargar la información del inquilino.'))
       } finally {
         if (isMounted) setLoading(false)
       }
@@ -120,7 +121,12 @@ function DashboardInquilino() {
 
       <section className="panel dashboard-section">
         <h2>Ultimos pagos</h2>
-        <SimpleTable columns={paymentColumns} rows={payments} emptyMessage="No hay pagos registrados." />
+        <SimpleTable
+          columns={paymentColumns}
+          rows={payments}
+          emptyMessage="No hay pagos registrados."
+          emptyDescription="Cuando se generen facturas para tu contrato, vas a verlas en esta sección."
+        />
       </section>
 
       <section className="panel dashboard-section">
@@ -132,6 +138,8 @@ function DashboardInquilino() {
           columns={repairColumns}
           rows={repairs}
           emptyMessage="No hay solicitudes de arreglo registradas."
+          emptyDescription="Si necesitás reportar un problema en la propiedad, podés crear una solicitud."
+          emptyAction={<Link className="button-link" to="/inquilino/arreglos/nuevo">Solicitar arreglo</Link>}
         />
       </section>
     </DashboardLayout>

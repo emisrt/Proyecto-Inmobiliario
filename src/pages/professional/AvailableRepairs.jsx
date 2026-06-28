@@ -5,6 +5,7 @@ import SimpleTable from '../../components/SimpleTable'
 import StatusBadge from '../../components/StatusBadge'
 import { listPublishedRepairs } from '../../services/repairService'
 import { formatDate } from '../../utils/formatters'
+import { toUserErrorMessage } from '../../utils/userMessages'
 
 function AvailableRepairs() {
   const [repairs, setRepairs] = useState([])
@@ -22,7 +23,7 @@ function AvailableRepairs() {
         const data = await listPublishedRepairs()
         if (isMounted) setRepairs(data)
       } catch (repairError) {
-        if (isMounted) setError(repairError.message)
+        if (isMounted) setError(toUserErrorMessage(repairError, 'No se pudieron cargar los trabajos disponibles.'))
       } finally {
         if (isMounted) setLoading(false)
       }
@@ -41,7 +42,7 @@ function AvailableRepairs() {
     { header: 'Tipo', accessor: 'repair_type' },
     { header: 'Prioridad', key: 'priority', render: (repair) => <StatusBadge status={repair.priority} /> },
     { header: 'Publicado', key: 'created_at', render: (repair) => formatDate(repair.created_at?.slice(0, 10)) },
-    { header: 'Acciones', key: 'actions', render: (repair) => <Link to={`/profesional/arreglos-disponibles/${repair.id}`}>Ver detalle</Link> },
+    { header: 'Acciones', key: 'actions', render: (repair) => <Link to={`/profesional/arreglos-disponibles/${repair.id}`}>Ver trabajo</Link> },
   ]
 
   return (
@@ -49,7 +50,12 @@ function AvailableRepairs() {
       <section className="panel dashboard-section">
         {loading ? <p className="loading-feedback">Cargando trabajos disponibles...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}
-        <SimpleTable columns={columns} rows={repairs} emptyMessage="No hay arreglos publicados disponibles." />
+        <SimpleTable
+          columns={columns}
+          rows={repairs}
+          emptyMessage="No hay arreglos publicados disponibles."
+          emptyDescription="Cuando la inmobiliaria publique una solicitud, vas a poder verla y postularte desde acá."
+        />
       </section>
     </DashboardLayout>
   )

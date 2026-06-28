@@ -5,6 +5,7 @@ import StatusBadge from '../../components/StatusBadge'
 import { useAuth } from '../../context/useAuth'
 import { listProfessionalApplications } from '../../services/professionalService'
 import { formatCurrency, formatDate } from '../../utils/formatters'
+import { toUserErrorMessage } from '../../utils/userMessages'
 
 function ProfessionalApplications() {
   const { user } = useAuth()
@@ -23,7 +24,7 @@ function ProfessionalApplications() {
         const data = await listProfessionalApplications(user.id)
         if (isMounted) setApplications(data)
       } catch (applicationError) {
-        if (isMounted) setError(applicationError.message)
+        if (isMounted) setError(toUserErrorMessage(applicationError, 'No se pudieron cargar tus postulaciones.'))
       } finally {
         if (isMounted) setLoading(false)
       }
@@ -48,7 +49,12 @@ function ProfessionalApplications() {
       <section className="panel dashboard-section">
         {loading ? <p className="loading-feedback">Cargando postulaciones...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}
-        <SimpleTable columns={columns} rows={applications} emptyMessage="Todavia no realizaste postulaciones." />
+        <SimpleTable
+          columns={columns}
+          rows={applications}
+          emptyMessage="Todavía no realizaste postulaciones."
+          emptyDescription="Cuando te postules a un arreglo publicado, vas a poder seguir su estado desde acá."
+        />
       </section>
     </DashboardLayout>
   )

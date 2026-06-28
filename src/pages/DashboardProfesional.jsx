@@ -6,6 +6,7 @@ import StatCard from '../components/StatCard'
 import StatusBadge from '../components/StatusBadge'
 import { useAuth } from '../context/useAuth'
 import { supabase } from '../services/supabaseClient'
+import { toUserErrorMessage } from '../utils/userMessages'
 import { formatCurrency, formatDate } from '../utils/formatters'
 
 const repairColumns = [
@@ -87,7 +88,7 @@ function DashboardProfesional() {
         setApplications(applicationsResult.data || [])
         setAssignedJobs(assignedResult.data || [])
       } catch (dashboardError) {
-        if (isMounted) setError(dashboardError.message)
+        if (isMounted) setError(toUserErrorMessage(dashboardError, 'No se pudo cargar la información profesional.'))
       } finally {
         if (isMounted) setLoading(false)
       }
@@ -125,6 +126,7 @@ function DashboardProfesional() {
           columns={repairColumns}
           rows={availableJobs}
           emptyMessage="No hay arreglos publicados disponibles."
+          emptyDescription="Cuando la inmobiliaria publique trabajos, vas a poder revisarlos y postularte."
         />
       </section>
 
@@ -133,7 +135,8 @@ function DashboardProfesional() {
         <SimpleTable
           columns={applicationColumns}
           rows={applications}
-          emptyMessage="Todavia no realizaste postulaciones."
+          emptyMessage="Todavía no realizaste postulaciones."
+          emptyDescription="Postulate a un arreglo publicado para que aparezca en este listado."
         />
       </section>
 
@@ -142,7 +145,8 @@ function DashboardProfesional() {
         <SimpleTable
           columns={assignedColumns}
           rows={assignedJobs}
-          emptyMessage="No tenes trabajos asignados."
+          emptyMessage="No tenés trabajos asignados."
+          emptyDescription="Los trabajos aceptados por la inmobiliaria aparecerán acá."
         />
       </section>
     </DashboardLayout>

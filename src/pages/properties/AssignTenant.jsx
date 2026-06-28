@@ -11,6 +11,7 @@ import {
 } from '../../services/assignmentService'
 import { getProperty } from '../../services/propertyService'
 import { formatCurrency } from '../../utils/formatters'
+import { toUserErrorMessage } from '../../utils/userMessages'
 
 const availableRentalStatuses = ['disponible', 'disponible_alquiler']
 const blockedRoles = ['agente_inmobiliario', 'profesional']
@@ -64,7 +65,7 @@ function AssignTenant() {
         monthlyAmount: currentForm.monthlyAmount || data.price || '',
       }))
     } catch (propertyError) {
-      setError(propertyError.message)
+      setError(toUserErrorMessage(propertyError, 'No se pudo cargar la propiedad.'))
     } finally {
       setLoading(false)
     }
@@ -94,7 +95,7 @@ function AssignTenant() {
         setError('Usuario no encontrado.')
       }
     } catch (searchError) {
-      setError(searchError.message)
+      setError(toUserErrorMessage(searchError, 'No se pudo buscar usuarios.'))
     } finally {
       setSearching(false)
     }
@@ -128,6 +129,9 @@ function AssignTenant() {
 
     try {
       await validateAssignment()
+      const shouldContinue = window.confirm('¿Confirmás la asignación del inquilino y la creación del contrato?')
+      if (!shouldContinue) return
+
       await assignTenantToProperty({
         propertyId: property.id,
         tenantId: tenant.id,
@@ -138,10 +142,10 @@ function AssignTenant() {
         status: form.status,
         rules: form.rules,
       })
-      setSuccess('Asignación realizada correctamente.')
+      setSuccess('Inquilino asignado correctamente. Se creó el contrato asociado.')
       setTimeout(() => navigate(`/inmobiliaria/propiedades/${property.id}`), 900)
     } catch (assignmentError) {
-      setError(assignmentError.message || 'No se pudo crear el contrato.')
+      setError(toUserErrorMessage(assignmentError, 'No se pudo crear el contrato.'))
     } finally {
       setSaving(false)
     }

@@ -1,5 +1,5 @@
--- Sistema inmobiliario - politicas minimas de Row Level Security.
--- Ejecutar despues de 01_schema.sql.
+-- Sistema inmobiliario - politicas finales de Row Level Security.
+-- Ejecutar despues de 00_full_demo_schema.sql o 01_schema.sql, segun el camino elegido.
 
 alter table public.profiles enable row level security;
 alter table public.properties enable row level security;
@@ -9,6 +9,33 @@ alter table public.repair_requests enable row level security;
 alter table public.professional_profiles enable row level security;
 alter table public.job_applications enable row level security;
 alter table public.property_images enable row level security;
+
+alter table public.repair_requests
+  alter column tenant_id drop not null;
+
+alter table public.repair_requests
+  add column if not exists created_by_id uuid references public.profiles(id) on delete set null;
+
+alter table public.repair_requests
+  add column if not exists requested_by_role text;
+
+do $$
+begin
+  if not exists (
+    select 1
+    from information_schema.table_constraints
+    where constraint_schema = 'public'
+      and table_name = 'repair_requests'
+      and constraint_name = 'repair_requests_requested_by_role_check'
+  ) then
+    alter table public.repair_requests
+      add constraint repair_requests_requested_by_role_check
+      check (
+        requested_by_role is null
+        or requested_by_role in ('inquilino', 'agente_inmobiliario', 'propietario')
+      );
+  end if;
+end $$;
 
 create or replace function public.current_user_role()
 returns text
