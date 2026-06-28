@@ -9,6 +9,7 @@ import {
   User,
   Wrench,
 } from 'lucide-react'
+import { agencyConfig } from '../config/agencyConfig'
 import { useAuth } from '../context/useAuth'
 import BrandLogo from './BrandLogo'
 
@@ -32,7 +33,8 @@ const roleNavigation = {
     { to: '/propietario', label: 'Inicio', icon: Home, exact: true },
     { to: '/propietario/propiedades', label: 'Mis propiedades', icon: Building2 },
     { to: '/propietario/contratos', label: 'Contratos', icon: FileText },
-    { to: '/propietario/cobros', label: 'Cobros', icon: CreditCard },
+    { to: '/propietario/pagos', label: 'Pagos', icon: CreditCard },
+    { to: '/propietario/arreglos', label: 'Arreglos', icon: Wrench },
   ],
   Inquilino: [
     { to: '/inquilino', label: 'Inicio', icon: Home, exact: true },
@@ -59,18 +61,17 @@ function DashboardLayout({ title, role, roleLabel, organizationName, headingEyeb
   const location = useLocation()
   const navItems = roleNavigation[role] || roleNavigation.Inmobiliaria
   const displayRole = roleLabel || role
+  const displayOrganization = organizationName || agencyConfig.name
 
   return (
     <div className="figma-dashboard">
       <header className="figma-dashboard-topbar">
         <div className="dashboard-organization">
           <BrandLogo compact variant="light" />
-          {organizationName ? (
-            <div>
-              <strong>{organizationName}</strong>
-              <span>Sistema interno</span>
-            </div>
-          ) : null}
+          <div>
+            <strong>{displayOrganization}</strong>
+            <span>{agencyConfig.tagline}</span>
+          </div>
         </div>
         <div className="dashboard-userbar">
           <button className="notification-button" type="button" aria-label="Notificaciones">

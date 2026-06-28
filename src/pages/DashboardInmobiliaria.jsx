@@ -15,6 +15,7 @@ import {
   Wrench,
 } from 'lucide-react'
 import DashboardLayout from '../components/DashboardLayout'
+import { agencyConfig } from '../config/agencyConfig'
 import StatusBadge from '../components/StatusBadge'
 import { formatDate } from '../utils/formatters'
 import { supabase } from '../services/supabaseClient'
@@ -269,8 +270,8 @@ function DashboardInmobiliaria() {
       title="Resumen general"
       role="Inmobiliaria"
       roleLabel="Agente"
-      organizationName="Inmobiliaria Demo"
-      headingEyebrow="Panel de gestión de la inmobiliaria"
+      organizationName={agencyConfig.name}
+      headingEyebrow={`Panel de gestión de ${agencyConfig.name}`}
     >
       {loading ? <p className="loading-feedback">Cargando información del panel...</p> : null}
       {dashboardData.errors.length > 0 ? (
@@ -438,7 +439,7 @@ function DashboardInmobiliaria() {
                   </span>
                   <span className="agent-row-main">
                     <strong>{client.name}</strong>
-                    <small>{client.role} · {client.detail || client.property || 'Vinculado a la inmobiliaria'}</small>
+                    <small>{client.role} · {client.detail || client.property || `Vinculado a ${agencyConfig.name}`}</small>
                   </span>
                   <span className={`client-status ${client.status === 'Vencido' ? 'client-status-danger' : ''}`}>{client.status}</span>
                 </div>

@@ -21,6 +21,7 @@ import {
 import DashboardLayout from '../../components/DashboardLayout'
 import PublicHeader from '../../components/PublicHeader'
 import StatusBadge from '../../components/StatusBadge'
+import { agencyConfig } from '../../config/agencyConfig'
 import {
   deletePropertySafely,
   getProperty,
@@ -277,7 +278,7 @@ function PropertyDetail({ publicView = false }) {
         <>
           <header className="internal-property-heading">
             <div>
-              <p className="eyebrow">Panel interno de la inmobiliaria</p>
+              <p className="eyebrow">Panel interno de {agencyConfig.name}</p>
               <h2>Detalle de propiedad</h2>
               <span>{property.title}</span>
             </div>
@@ -314,7 +315,7 @@ function PropertyDetail({ publicView = false }) {
               </div>
               <div className="internal-management-note">
                 <ShieldAlert size={16} />
-                <span>Administrada por la inmobiliaria</span>
+                <span>Administrada por {agencyConfig.name}</span>
               </div>
             </div>
           </section>
@@ -599,7 +600,7 @@ function PropertyDetail({ publicView = false }) {
                 <article className="public-detail-card public-contact-card" id="consulta-propiedad">
                   <div>
                     <h2>¿Te interesa esta propiedad?</h2>
-                    <p>Comunicate con la inmobiliaria para coordinar una visita o solicitar más información.</p>
+                    <p>Comunicate con {agencyConfig.name} para coordinar una visita o solicitar más información.</p>
                     {contactNotice ? <p className="public-contact-notice">{contactNotice}</p> : null}
                   </div>
                   <button

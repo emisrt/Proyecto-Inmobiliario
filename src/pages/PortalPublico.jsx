@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import PublicHeader from '../components/PublicHeader'
 import StatusBadge from '../components/StatusBadge'
+import { agencyConfig } from '../config/agencyConfig'
 import { useAuth } from '../context/useAuth'
 import { listPublicProperties } from '../services/propertyService'
 import { formatCurrency } from '../utils/formatters'
@@ -89,7 +90,7 @@ function PortalPublico() {
           <div className="portal-results-header">
             <div>
               <p className="eyebrow">Inmuebles</p>
-              <h2>Propiedades publicadas</h2>
+              <h2>{agencyConfig.publicPortalTitle}</h2>
             </div>
             <div className="portal-results-meta">
               <span>Mostrando {properties.length} propiedades</span>
@@ -139,7 +140,7 @@ function PortalPublico() {
           <section className="portal-cta">
             <div>
               <p className="eyebrow">Acceso institucional</p>
-              <h2>Panel de gestión de la inmobiliaria</h2>
+              <h2>Panel de gestión de {agencyConfig.name}</h2>
               <p>Acceso exclusivo para usuarios autorizados: agentes, propietarios, inquilinos y profesionales registrados.</p>
             </div>
             <Link className="button-link" to={panelPath}>Ingresar al panel</Link>
@@ -149,20 +150,20 @@ function PortalPublico() {
             <div>
               <p className="eyebrow">Contacto</p>
               <h2>Consultá por una propiedad</h2>
-              <p>Coordiná una visita o solicitá más información con la inmobiliaria.</p>
+              <p>Coordiná una visita o solicitá más información con {agencyConfig.name}.</p>
             </div>
             <div className="portal-contact-grid">
               <article>
                 <strong>WhatsApp</strong>
-                <span>Disponible próximamente</span>
+                <span>{agencyConfig.whatsapp}</span>
               </article>
               <article>
                 <strong>Dirección</strong>
-                <span>Dirección de la inmobiliaria</span>
+                <span>{agencyConfig.address}</span>
               </article>
               <article>
                 <strong>Horario</strong>
-                <span>Lunes a viernes de 8:00 a 17:00</span>
+                <span>{agencyConfig.businessHours}</span>
               </article>
             </div>
           </section>

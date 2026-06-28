@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
+import { agencyConfig } from '../config/agencyConfig'
 import { supabase } from '../services/supabaseClient'
 import { AuthContext } from './authContextValue'
+
+const publicDemoRoles = ['inquilino', 'propietario', 'profesional', 'visitante']
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
@@ -126,6 +129,13 @@ export function AuthProvider({ children }) {
 
     if (!supabase) {
       const message = 'Supabase no esta configurado.'
+      setError(message)
+      setLoading(false)
+      return { data: null, error: new Error(message), profile: null }
+    }
+
+    if (!publicDemoRoles.includes(role)) {
+      const message = `El alta de ese rol debe ser administrada por ${agencyConfig.name}.`
       setError(message)
       setLoading(false)
       return { data: null, error: new Error(message), profile: null }

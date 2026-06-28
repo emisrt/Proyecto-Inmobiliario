@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { AlertCircle, Eye, EyeOff, IdCard, Lock } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import AuthShell from '../components/AuthShell'
+import { agencyConfig } from '../config/agencyConfig'
 import { useAuth } from '../context/useAuth'
 import { getRoleHome } from '../utils/roles'
 
@@ -25,8 +26,8 @@ function Login() {
     <AuthShell
       eyebrow="Acceso al sistema"
       title="Iniciar sesión"
-      description="Ingresá con tu correo electrónico y contraseña para acceder a Locative."
-      footer={<Link to="/register">Solicitar acceso demo</Link>}
+      description={`Ingresá con tu correo electrónico y contraseña para acceder a ${agencyConfig.systemName}.`}
+      footer={<Link to="/register">Crear cuenta de prueba</Link>}
       showValuePanel
     >
       <form className="figma-auth-form" onSubmit={handleSubmit}>

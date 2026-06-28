@@ -2,8 +2,16 @@ import { useState } from 'react'
 import { AlertCircle, IdCard, Lock, Phone, User } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import AuthShell from '../components/AuthShell'
+import { agencyConfig } from '../config/agencyConfig'
 import { useAuth } from '../context/useAuth'
 import { getRoleHome } from '../utils/roles'
+
+const demoRoles = [
+  { value: 'inquilino', label: 'Inquilino demo' },
+  { value: 'propietario', label: 'Propietario demo' },
+  { value: 'profesional', label: 'Profesional externo demo' },
+  { value: 'visitante', label: 'Visitante demo' },
+]
 
 function Register() {
   const { register, loading, error } = useAuth()
@@ -34,14 +42,14 @@ function Register() {
       return
     }
 
-    setMessage('Usuario demo creado. Revisá confirmación de email si Supabase la solicita.')
+    setMessage('Cuenta de prueba creada. Revisá confirmación de email si Supabase la solicita.')
   }
 
   return (
     <AuthShell
       eyebrow="Acceso demo"
-      title="Solicitar acceso"
-      description="Alta de usuario para el prototipo académico de la inmobiliaria. En producción, estos accesos serían administrados por el agente inmobiliario."
+      title="Crear cuenta de prueba"
+      description="Este acceso se utiliza únicamente para la demostración del prototipo académico."
       footer={<Link to="/login">Ya tengo acceso</Link>}
     >
       <form className="figma-auth-form" onSubmit={handleSubmit}>
@@ -100,19 +108,22 @@ function Register() {
         <label>
           <span>
             <User size={14} />
-            Rol vinculado a la inmobiliaria
+            Perfil demo
           </span>
           <select value={role} onChange={(event) => setRole(event.target.value)} required>
             <option value="" disabled>
-              Seleccionar rol
+              Seleccionar perfil de prueba
             </option>
-            <option value="agente_inmobiliario">Agente inmobiliario</option>
-            <option value="propietario">Propietario</option>
-            <option value="inquilino">Inquilino</option>
-            <option value="profesional">Profesional externo</option>
-            <option value="visitante">Visitante</option>
+            {demoRoles.map((demoRole) => (
+              <option key={demoRole.value} value={demoRole.value}>
+                {demoRole.label}
+              </option>
+            ))}
           </select>
         </label>
+        <p className="form-help">
+          En un entorno real, el alta de usuarios será administrada por {agencyConfig.name}.
+        </p>
         {error ? (
           <p className="inline-error">
             <AlertCircle size={15} />
@@ -121,7 +132,7 @@ function Register() {
         ) : null}
         {message ? <p className="success-message">{message}</p> : null}
         <button type="submit" disabled={loading}>
-          {loading ? 'Creando acceso...' : 'Crear usuario demo'}
+          {loading ? 'Creando cuenta de prueba...' : 'Crear cuenta de prueba'}
         </button>
       </form>
     </AuthShell>

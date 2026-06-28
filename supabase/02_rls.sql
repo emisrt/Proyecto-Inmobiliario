@@ -71,6 +71,22 @@ to authenticated
 using (
   auth.uid() = id
   or public.is_agent()
+  or exists (
+    select 1
+    from public.contracts c
+    where c.owner_id = auth.uid()
+      and (
+        c.tenant_id = profiles.id
+        or c.owner_id = profiles.id
+      )
+  )
+  or exists (
+    select 1
+    from public.repair_requests rr
+    join public.properties p on p.id = rr.property_id
+    where p.owner_id = auth.uid()
+      and rr.assigned_professional_id = profiles.id
+  )
 );
 
 create policy "profiles_update_own"
@@ -201,6 +217,15 @@ using (
       from public.properties p
       where p.id = repair_requests.property_id
         and p.agent_id = auth.uid()
+    )
+  )
+  or (
+    public.current_user_role() = 'propietario'
+    and exists (
+      select 1
+      from public.properties p
+      where p.id = repair_requests.property_id
+        and p.owner_id = auth.uid()
     )
   )
 );

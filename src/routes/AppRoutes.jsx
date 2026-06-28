@@ -255,7 +255,7 @@ function AppRoutes() {
         path="/propietario/propiedades"
         element={
           <RoleProtectedRoute allowedRoles={['propietario']}>
-            <ComingSoon title="Mis propiedades" role="Propietario" homePath="/propietario" />
+            <DashboardPropietario view="properties" />
           </RoleProtectedRoute>
         }
       />
@@ -263,15 +263,23 @@ function AppRoutes() {
         path="/propietario/contratos"
         element={
           <RoleProtectedRoute allowedRoles={['propietario']}>
-            <ComingSoon title="Contratos" role="Propietario" homePath="/propietario" />
+            <DashboardPropietario view="contracts" />
           </RoleProtectedRoute>
         }
       />
       <Route
-        path="/propietario/cobros"
+        path="/propietario/pagos"
         element={
           <RoleProtectedRoute allowedRoles={['propietario']}>
-            <ComingSoon title="Cobros" role="Propietario" homePath="/propietario" />
+            <DashboardPropietario view="payments" />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/propietario/arreglos"
+        element={
+          <RoleProtectedRoute allowedRoles={['propietario']}>
+            <DashboardPropietario view="repairs" />
           </RoleProtectedRoute>
         }
       />

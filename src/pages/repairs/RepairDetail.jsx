@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import DashboardLayout from '../../components/DashboardLayout'
 import StatusBadge from '../../components/StatusBadge'
+import { agencyConfig } from '../../config/agencyConfig'
 import { getRepair, updateRepairByAgent } from '../../services/repairService'
 import { formatDate } from '../../utils/formatters'
 
@@ -87,7 +88,7 @@ function RepairDetail({ mode = 'tenant' }) {
                 <div><dt>Estado</dt><dd><StatusBadge status={repair.status} /></dd></div>
                 <div><dt>Profesional asignado</dt><dd>{formatPerson(repair.assigned_professional, 'Sin asignar')}</dd></div>
               </dl>
-              {!isAgent ? <p className="muted">Observaciones: {repair.agent_notes || 'Sin observaciones de la inmobiliaria.'}</p> : null}
+              {!isAgent ? <p className="muted">Observaciones: {repair.agent_notes || `Sin observaciones de ${agencyConfig.name}.`}</p> : null}
             </div>
             {isAgent ? (
               <form className="form compact-form" onSubmit={handleSubmit}>

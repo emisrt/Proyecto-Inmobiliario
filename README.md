@@ -11,7 +11,7 @@ Locative es un sistema web interno de gestión inmobiliaria desarrollado como pr
 
 ## Enfoque
 
-El proyecto no implementa multi-agencia ni planes comerciales. Los roles representan actores vinculados a la misma inmobiliaria:
+Los roles representan actores vinculados a la misma inmobiliaria:
 
 - agente inmobiliario
 - propietario
