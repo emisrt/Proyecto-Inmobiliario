@@ -44,7 +44,7 @@ function PropertyList() {
             Nueva propiedad
           </Link>
         </div>
-        {loading ? <p className="muted">Cargando propiedades...</p> : null}
+        {loading ? <p className="loading-feedback">Cargando propiedades...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}
         <div className="table-wrapper">
           <table className="simple-table interactive-table">
@@ -62,7 +62,10 @@ function PropertyList() {
             <tbody>
               {properties.length === 0 ? (
                 <tr>
-                  <td colSpan="7">No hay propiedades registradas.</td>
+                  <td className="table-empty-cell" colSpan="7">
+                    <strong>No hay propiedades registradas.</strong>
+                    <span>Cuando cargues una propiedad, aparecerá en este listado.</span>
+                  </td>
                 </tr>
               ) : (
                 properties.map((property) => (

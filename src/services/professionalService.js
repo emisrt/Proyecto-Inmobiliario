@@ -180,7 +180,7 @@ export async function applyToRepair(repairId, userId, values) {
 export async function listRepairApplications(repairId) {
   const { data, error } = await supabase
     .from('job_applications')
-    .select('*, professional:professional_id(full_name, phone)')
+    .select('*, professional:professional_id(full_name, email, phone)')
     .eq('repair_request_id', repairId)
     .order('created_at', { ascending: false })
 
@@ -193,7 +193,7 @@ export async function listRepairApplications(repairId) {
 
   const { data: profiles, error: profileError } = await supabase
     .from('professional_profiles')
-    .select('user_id, specialty, work_zone')
+    .select('user_id, specialty, work_zone, availability')
     .in('user_id', professionalIds)
 
   if (profileError) throw profileError

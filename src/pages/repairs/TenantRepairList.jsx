@@ -56,7 +56,7 @@ function TenantRepairList() {
             Solicitar arreglo
           </Link>
         </div>
-        {loading ? <p className="muted">Cargando solicitudes...</p> : null}
+        {loading ? <p className="loading-feedback">Cargando solicitudes...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}
         <SimpleTable columns={columns} rows={repairs} emptyMessage="Todavia no cargaste solicitudes." />
       </section>

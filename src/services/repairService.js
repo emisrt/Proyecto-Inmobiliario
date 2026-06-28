@@ -19,7 +19,7 @@ export async function getActiveTenantContract(userId) {
 export async function listTenantRepairs(userId) {
   const { data, error } = await supabase
     .from('repair_requests')
-    .select('*, properties(title, address), assigned_professional:assigned_professional_id(full_name)')
+    .select('*, properties(title, address), assigned_professional:assigned_professional_id(full_name, phone)')
     .eq('tenant_id', userId)
     .order('created_at', { ascending: false })
 
@@ -30,7 +30,7 @@ export async function listTenantRepairs(userId) {
 export async function listAgentRepairs({ status = '' } = {}) {
   let query = supabase
     .from('repair_requests')
-    .select('*, properties(title, address, city), tenant:tenant_id(full_name), assigned_professional:assigned_professional_id(full_name)')
+    .select('*, properties(title, address, city), tenant:tenant_id(full_name, email, phone), assigned_professional:assigned_professional_id(full_name, phone)')
     .order('created_at', { ascending: false })
 
   if (status === 'publicado') {
@@ -66,7 +66,7 @@ export async function listRepairProperties(agentId) {
 export async function getActiveContractByProperty(propertyId) {
   const { data, error } = await supabase
     .from('contracts')
-    .select('id, tenant_id, status')
+    .select('id, tenant_id, status, tenant:tenant_id(full_name, email, phone)')
     .eq('property_id', propertyId)
     .eq('status', 'activo')
     .order('created_at', { ascending: false })
@@ -80,7 +80,7 @@ export async function getActiveContractByProperty(propertyId) {
 export async function listPublishedRepairs() {
   const { data, error } = await supabase
     .from('repair_requests')
-    .select('*, properties(title, address), tenant:tenant_id(full_name)')
+    .select('*, properties(title, address), tenant:tenant_id(full_name, email, phone)')
     .in('status', publishedRepairStatuses)
     .order('created_at', { ascending: false })
 
@@ -91,7 +91,7 @@ export async function listPublishedRepairs() {
 export async function getRepair(id) {
   const { data, error } = await supabase
     .from('repair_requests')
-    .select('*, properties(title, address), tenant:tenant_id(full_name), assigned_professional:assigned_professional_id(full_name)')
+    .select('*, properties(title, address), tenant:tenant_id(full_name, email, phone), assigned_professional:assigned_professional_id(full_name, phone)')
     .eq('id', id)
     .maybeSingle()
 
@@ -169,7 +169,7 @@ export async function updateRepairStatus(id, status) {
 export async function listAssignedRepairs(userId) {
   const { data, error } = await supabase
     .from('repair_requests')
-    .select('*, properties(title, address), tenant:tenant_id(full_name)')
+    .select('*, properties(title, address), tenant:tenant_id(full_name, email, phone)')
     .eq('assigned_professional_id', userId)
     .order('created_at', { ascending: false })
 

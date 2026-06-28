@@ -92,7 +92,6 @@ function PropertyForm() {
       owner.full_name?.toLowerCase().includes(normalizedSearch)
       || owner.email?.toLowerCase().includes(normalizedSearch)
       || owner.phone?.toLowerCase().includes(normalizedSearch)
-      || owner.id.toLowerCase().includes(normalizedSearch)
     ))
   }, [ownerSearch, owners])
 
@@ -235,7 +234,7 @@ function PropertyForm() {
       roleLabel="Agente"
       headingEyebrow="Carga de propiedades"
     >
-      {loading ? <p className="muted">Cargando propiedad...</p> : null}
+      {loading ? <p className="loading-feedback">Cargando propiedad...</p> : null}
       {error ? <p className="error-message">{error}</p> : null}
       {success ? <p className="success-message">{success}</p> : null}
 
@@ -393,7 +392,7 @@ function PropertyForm() {
           <div className="property-form-grid">
             <label>
               Buscar propietario
-              <input value={ownerSearch} onChange={(event) => setOwnerSearch(event.target.value)} placeholder="Nombre, email, teléfono o ID" />
+              <input value={ownerSearch} onChange={(event) => setOwnerSearch(event.target.value)} placeholder="Nombre, email o teléfono" />
             </label>
             <label>
               Propietario
@@ -401,7 +400,7 @@ function PropertyForm() {
                 <option value="">Sin propietario asignado</option>
                 {filteredOwners.map((owner) => (
                   <option key={owner.id} value={owner.id}>
-                    {owner.full_name || owner.email || owner.id}
+                    {owner.full_name || owner.email || 'Propietario sin datos visibles'}
                   </option>
                 ))}
               </select>

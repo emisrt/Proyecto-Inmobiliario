@@ -25,6 +25,10 @@ const contractSummaryFallbackSelect = `
   status,
   tenant:tenant_id(full_name, phone)
 `
+const blockingDeletionMessage =
+  'No se puede eliminar esta propiedad porque tiene información asociada. Usá Anular o Suspendida para conservar el historial.'
+const activeContractStatuses = ['activo', 'pendiente']
+const activeRepairStatuses = ['pendiente', 'publicada', 'publicado', 'en_proceso', 'pendiente_confirmacion']
 
 export const publicPropertyStatuses = ['disponible', 'disponible_alquiler', 'disponible_venta']
 
@@ -191,14 +195,15 @@ export async function getPropertyDeletionSummary(propertyId) {
   const [repairs, activeRepairs, payments] = await Promise.all([
     countRows('repair_requests', (query) => query.eq('property_id', propertyId)),
     countRows('repair_requests', (query) =>
-      query.eq('property_id', propertyId).in('status', ['pendiente', 'publicada', 'publicado', 'en_proceso', 'pendiente_confirmacion']),
+      query.eq('property_id', propertyId).in('status', activeRepairStatuses),
     ),
     contractIds.length > 0
       ? countRows('payments', (query) => query.in('contract_id', contractIds))
       : Promise.resolve(0),
   ])
 
-  const activeContracts = (contracts || []).filter((contract) => ['activo', 'pendiente'].includes(contract.status)).length
+  const activeContracts = (contracts || []).filter((contract) => activeContractStatuses.includes(contract.status)).length
+  const canDelete = activeContracts === 0 && activeRepairs === 0 && payments === 0
 
   return {
     contracts: contracts?.length || 0,
@@ -206,10 +211,26 @@ export async function getPropertyDeletionSummary(propertyId) {
     repairs,
     activeRepairs,
     payments,
+    canDelete,
+    blockingMessage: canDelete ? null : blockingDeletionMessage,
   }
 }
 
-export async function deleteProperty(id) {
+export async function deletePropertySafely(id) {
+  const summary = await getPropertyDeletionSummary(id)
+
+  if (!summary.canDelete) {
+    const error = new Error(blockingDeletionMessage)
+    error.summary = summary
+    throw error
+  }
+
   const { error } = await supabase.from('properties').delete().eq('id', id)
-  if (error) throw error
+  if (error) {
+    throw new Error('No se pudo eliminar la propiedad. Verificá permisos y relaciones asociadas.')
+  }
+
+  return summary
 }
+
+export const deleteProperty = deletePropertySafely

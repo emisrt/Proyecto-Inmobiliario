@@ -98,7 +98,7 @@ function PortalPublico() {
             </div>
           </div>
 
-          {loading ? <p className="muted">Cargando propiedades...</p> : null}
+          {loading ? <p className="loading-feedback">Cargando propiedades...</p> : null}
           {error ? <p className="error-message">{error}</p> : null}
 
           {!loading && properties.length === 0 ? (

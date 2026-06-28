@@ -272,7 +272,7 @@ function DashboardInmobiliaria() {
       organizationName="Inmobiliaria Demo"
       headingEyebrow="Panel de gestión de la inmobiliaria"
     >
-      {loading ? <p className="muted">Cargando información del panel...</p> : null}
+      {loading ? <p className="loading-feedback">Cargando información del panel...</p> : null}
       {dashboardData.errors.length > 0 ? (
         <div className="agent-warning-box">
           <strong>Algunos datos no se pudieron cargar.</strong>
@@ -362,7 +362,7 @@ function DashboardInmobiliaria() {
               <Plus size={17} />
               Nueva propiedad
             </Link>
-            <Link to="/inmobiliaria">
+            <Link to="/inmobiliaria/contratos/nuevo">
               <FilePlus2 size={17} />
               Nuevo contrato
             </Link>
@@ -370,11 +370,11 @@ function DashboardInmobiliaria() {
               <Wrench size={17} />
               Nueva solicitud
             </Link>
-            <Link to="/inmobiliaria">
+            <Link to="/inmobiliaria/pagos">
               <CreditCard size={17} />
               Ver pagos
             </Link>
-            <Link to="/inmobiliaria/arreglos">
+            <Link to="/inmobiliaria/profesionales">
               <UsersRound size={17} />
               Ver profesionales
             </Link>

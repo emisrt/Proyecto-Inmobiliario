@@ -3,6 +3,7 @@ import DashboardInmobiliaria from '../pages/DashboardInmobiliaria'
 import DashboardInquilino from '../pages/DashboardInquilino'
 import DashboardProfesional from '../pages/DashboardProfesional'
 import DashboardPropietario from '../pages/DashboardPropietario'
+import ComingSoon from '../pages/ComingSoon'
 import Login from '../pages/Login'
 import NotFound from '../pages/NotFound'
 import PortalPublico from '../pages/PortalPublico'
@@ -83,6 +84,38 @@ function AppRoutes() {
         }
       />
       <Route
+        path="/inmobiliaria/contratos"
+        element={
+          <RoleProtectedRoute allowedRoles={['agente_inmobiliario']}>
+            <ComingSoon title="Contratos" role="Inmobiliaria" roleLabel="Agente" homePath="/inmobiliaria" />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/inmobiliaria/contratos/nuevo"
+        element={
+          <RoleProtectedRoute allowedRoles={['agente_inmobiliario']}>
+            <ComingSoon title="Nuevo contrato" role="Inmobiliaria" roleLabel="Agente" homePath="/inmobiliaria" />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/inmobiliaria/pagos"
+        element={
+          <RoleProtectedRoute allowedRoles={['agente_inmobiliario']}>
+            <ComingSoon title="Pagos" role="Inmobiliaria" roleLabel="Agente" homePath="/inmobiliaria" />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/inmobiliaria/profesionales"
+        element={
+          <RoleProtectedRoute allowedRoles={['agente_inmobiliario']}>
+            <ComingSoon title="Profesionales" role="Inmobiliaria" roleLabel="Agente" homePath="/inmobiliaria" />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
         path="/inmobiliaria/arreglos"
         element={
           <RoleProtectedRoute allowedRoles={['agente_inmobiliario']}>
@@ -147,6 +180,22 @@ function AppRoutes() {
         }
       />
       <Route
+        path="/inquilino/pagos"
+        element={
+          <RoleProtectedRoute allowedRoles={['inquilino']}>
+            <ComingSoon title="Mis pagos" role="Inquilino" homePath="/inquilino" />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/inquilino/contrato"
+        element={
+          <RoleProtectedRoute allowedRoles={['inquilino']}>
+            <ComingSoon title="Mi contrato" role="Inquilino" homePath="/inquilino" />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
         path="/profesional"
         element={
           <RoleProtectedRoute allowedRoles={['profesional']}>
@@ -199,6 +248,30 @@ function AppRoutes() {
         element={
           <RoleProtectedRoute allowedRoles={['propietario']}>
             <DashboardPropietario />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/propietario/propiedades"
+        element={
+          <RoleProtectedRoute allowedRoles={['propietario']}>
+            <ComingSoon title="Mis propiedades" role="Propietario" homePath="/propietario" />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/propietario/contratos"
+        element={
+          <RoleProtectedRoute allowedRoles={['propietario']}>
+            <ComingSoon title="Contratos" role="Propietario" homePath="/propietario" />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/propietario/cobros"
+        element={
+          <RoleProtectedRoute allowedRoles={['propietario']}>
+            <ComingSoon title="Cobros" role="Propietario" homePath="/propietario" />
           </RoleProtectedRoute>
         }
       />

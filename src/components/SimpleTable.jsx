@@ -1,4 +1,6 @@
 function SimpleTable({ columns, rows, emptyMessage = 'No hay datos para mostrar.' }) {
+  const colSpan = Math.max(columns.length, 1)
+
   return (
     <div className="table-wrapper">
       <table className="simple-table">
@@ -12,7 +14,10 @@ function SimpleTable({ columns, rows, emptyMessage = 'No hay datos para mostrar.
         <tbody>
           {rows.length === 0 ? (
             <tr>
-              <td colSpan={columns.length}>{emptyMessage}</td>
+              <td className="table-empty-cell" colSpan={colSpan}>
+                <strong>{emptyMessage}</strong>
+                <span>Cuando haya información disponible, aparecerá en esta tabla.</span>
+              </td>
             </tr>
           ) : (
             rows.map((row) => (

@@ -47,7 +47,7 @@ function AvailableRepairs() {
   return (
     <DashboardLayout title="Arreglos disponibles" role="Profesional externo">
       <section className="panel dashboard-section">
-        {loading ? <p className="muted">Cargando trabajos disponibles...</p> : null}
+        {loading ? <p className="loading-feedback">Cargando trabajos disponibles...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}
         <SimpleTable columns={columns} rows={repairs} emptyMessage="No hay arreglos publicados disponibles." />
       </section>

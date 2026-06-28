@@ -22,7 +22,7 @@ import DashboardLayout from '../../components/DashboardLayout'
 import PublicHeader from '../../components/PublicHeader'
 import StatusBadge from '../../components/StatusBadge'
 import {
-  deleteProperty,
+  deletePropertySafely,
   getProperty,
   getPropertyContractSummary,
   getPropertyDeletionSummary,
@@ -123,8 +123,8 @@ function PropertyDetail({ publicView = false }) {
     try {
       const summary = await getPropertyDeletionSummary(id)
       setDeleteSummary(summary)
-    } catch (summaryError) {
-      setDeleteError(summaryError.message)
+    } catch {
+      setDeleteError('No se pudo validar si la propiedad tiene información asociada. Intentá nuevamente.')
     } finally {
       setDeleteLoading(false)
     }
@@ -133,8 +133,8 @@ function PropertyDetail({ publicView = false }) {
   async function confirmDelete() {
     if (!deleteSummary) return
 
-    if (deleteSummary.activeContracts > 0 || deleteSummary.activeRepairs > 0) {
-      setDeleteError('No se puede eliminar una propiedad con contratos o arreglos activos.')
+    if (!deleteSummary.canDelete) {
+      setDeleteError(deleteSummary.blockingMessage)
       return
     }
 
@@ -142,10 +142,16 @@ function PropertyDetail({ publicView = false }) {
     setDeleteLoading(true)
 
     try {
-      await deleteProperty(id)
+      await deletePropertySafely(id)
       navigate('/inmobiliaria/propiedades', { replace: true })
     } catch (deletePropertyError) {
-      setDeleteError(deletePropertyError.message)
+      if (deletePropertyError.summary) {
+        setDeleteSummary(deletePropertyError.summary)
+      }
+      setDeleteError(
+        deletePropertyError.message
+        || 'No se pudo eliminar la propiedad. Verificá que no tenga información asociada.',
+      )
       setDeleteLoading(false)
     }
   }
@@ -259,11 +265,11 @@ function PropertyDetail({ publicView = false }) {
     assignableRentalStatuses.includes(property?.status) &&
     !blockedAssignmentStatuses.includes(property?.status) &&
     !contract
-  const deleteBlocked = Boolean(deleteSummary && (deleteSummary.activeContracts > 0 || deleteSummary.activeRepairs > 0))
+  const deleteBlocked = Boolean(deleteSummary && !deleteSummary.canDelete)
 
   const internalContent = (
     <section className="internal-property-page">
-      {loading ? <p className="muted">Cargando propiedad...</p> : null}
+      {loading ? <p className="loading-feedback">Cargando propiedad...</p> : null}
       {error ? <p className="error-message">{error}</p> : null}
       {success ? <p className="success-message">{success}</p> : null}
 
@@ -411,12 +417,8 @@ function PropertyDetail({ publicView = false }) {
                   </Link>
                 ) : null}
                 {contract ? (
-                  <button
-                    type="button"
-                    className="secondary-button"
-                    onClick={() => setSuccess('La vista de contrato se integrará próximamente.')}
-                  >
-                    Ver contrato
+                  <button type="button" className="secondary-button" disabled>
+                    Contrato asociado
                   </button>
                 ) : null}
                 <label className="status-control">
@@ -472,15 +474,15 @@ function PropertyDetail({ publicView = false }) {
             <div className="internal-modal-icon internal-modal-icon-danger">
               <Trash2 size={22} />
             </div>
-            <h3 id="delete-modal-title">Eliminar propiedad</h3>
-            <p>Antes de eliminar, Locative revisa si la propiedad tiene contratos, pagos o arreglos asociados.</p>
+            <h3 id="delete-modal-title">¿Eliminar esta propiedad?</h3>
+            <p>Esta acción eliminará definitivamente la propiedad de la base de datos. No se podrá recuperar.</p>
             {deleteLoading && !deleteSummary ? <p className="muted">Validando asociaciones...</p> : null}
             {deleteError ? <p className="error-message">{deleteError}</p> : null}
             {deleteSummary ? (
               <>
                 <div className="delete-summary-grid">
                   <div><span>Contratos</span><strong>{deleteSummary.contracts}</strong></div>
-                  <div><span>Contratos activos/pendientes</span><strong>{deleteSummary.activeContracts}</strong></div>
+                  <div><span>Contratos activos</span><strong>{deleteSummary.activeContracts}</strong></div>
                   <div><span>Arreglos</span><strong>{deleteSummary.repairs}</strong></div>
                   <div><span>Arreglos activos</span><strong>{deleteSummary.activeRepairs}</strong></div>
                   <div><span>Pagos asociados</span><strong>{deleteSummary.payments}</strong></div>
@@ -488,7 +490,7 @@ function PropertyDetail({ publicView = false }) {
                 {deleteBlocked ? (
                   <div className="internal-warning-box">
                     <AlertTriangle size={18} />
-                    <p>No se puede eliminar esta propiedad mientras tenga contratos o arreglos activos.</p>
+                    <p>No se puede eliminar esta propiedad porque tiene información asociada. Usá Anular o Suspendida para conservar el historial.</p>
                   </div>
                 ) : (
                   <div className="internal-warning-box">
@@ -517,7 +519,7 @@ function PropertyDetail({ publicView = false }) {
       <>
         <PublicHeader />
         <main className="public-property-detail">
-          {loading ? <p className="muted">Cargando propiedad...</p> : null}
+          {loading ? <p className="loading-feedback">Cargando propiedad...</p> : null}
           {error ? <p className="error-message">{error}</p> : null}
           {property ? (
             <>

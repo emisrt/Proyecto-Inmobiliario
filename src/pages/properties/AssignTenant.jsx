@@ -5,9 +5,9 @@ import StatusBadge from '../../components/StatusBadge'
 import { useAuth } from '../../context/useAuth'
 import {
   assignTenantToProperty,
-  findProfileByIdentifier,
   getActiveContractByProperty,
   getActiveContractByTenant,
+  searchAssignableProfiles,
 } from '../../services/assignmentService'
 import { getProperty } from '../../services/propertyService'
 import { formatCurrency } from '../../utils/formatters'
@@ -30,7 +30,8 @@ function AssignTenant() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [property, setProperty] = useState(null)
-  const [identifier, setIdentifier] = useState('')
+  const [profileSearch, setProfileSearch] = useState('')
+  const [profileResults, setProfileResults] = useState([])
   const [tenant, setTenant] = useState(null)
   const [form, setForm] = useState({
     startDate: getToday(),
@@ -84,10 +85,14 @@ function AssignTenant() {
     setError(null)
     setSuccess(null)
     setTenant(null)
+    setProfileResults([])
 
     try {
-      const profile = await findProfileByIdentifier(identifier)
-      setTenant(profile)
+      const profiles = await searchAssignableProfiles(profileSearch)
+      setProfileResults(profiles)
+      if (profiles.length === 0) {
+        setError('Usuario no encontrado.')
+      }
     } catch (searchError) {
       setError(searchError.message)
     } finally {
@@ -145,7 +150,7 @@ function AssignTenant() {
   return (
     <DashboardLayout title="Asignar inquilino" role="Inmobiliaria">
       <section className="panel dashboard-section">
-        {loading ? <p className="muted">Cargando propiedad...</p> : null}
+        {loading ? <p className="loading-feedback">Cargando propiedad...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}
         {success ? <p className="success-message">{success}</p> : null}
 
@@ -169,11 +174,11 @@ function AssignTenant() {
 
         <form className="form assignment-search" onSubmit={handleSearch}>
           <label>
-            ID de usuario o email
+            Buscar usuario
             <input
-              value={identifier}
-              onChange={(event) => setIdentifier(event.target.value)}
-              placeholder="usuario@email.com o UUID"
+              value={profileSearch}
+              onChange={(event) => setProfileSearch(event.target.value)}
+              placeholder="Nombre o email"
             />
           </label>
           <button type="submit" disabled={searching}>
@@ -181,12 +186,31 @@ function AssignTenant() {
           </button>
         </form>
 
+        {profileResults.length > 0 ? (
+          <section className="assignment-results" aria-label="Usuarios encontrados">
+            {profileResults.map((profile) => (
+              <button
+                className={`tenant-option ${tenant?.id === profile.id ? 'selected' : ''}`}
+                key={profile.id}
+                type="button"
+                onClick={() => setTenant(profile)}
+              >
+                <span>
+                  <strong>{profile.full_name || 'Sin nombre cargado'}</strong>
+                  <small>{profile.email || profile.phone || 'Sin contacto cargado'}</small>
+                </span>
+                <StatusBadge status={profile.role} />
+              </button>
+            ))}
+          </section>
+        ) : null}
+
         {tenant ? (
           <article className="tenant-result">
             <div>
-              <p className="eyebrow">Usuario encontrado</p>
+              <p className="eyebrow">Usuario seleccionado</p>
               <h2>{tenant.full_name || 'Sin nombre cargado'}</h2>
-              <p>{tenant.email || tenant.id}</p>
+              <p>{tenant.email || 'Email no especificado'}</p>
               <p className="muted">{tenant.phone || 'Sin teléfono'}</p>
             </div>
             <StatusBadge status={tenant.role} />

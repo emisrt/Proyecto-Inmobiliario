@@ -25,6 +25,7 @@ function AgentRepairForm() {
   const { user } = useAuth()
   const [properties, setProperties] = useState([])
   const [values, setValues] = useState(initialValues)
+  const [activeContract, setActiveContract] = useState(null)
   const [loading, setLoading] = useState(true)
   const [checkingContract, setCheckingContract] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -58,6 +59,7 @@ function AgentRepairForm() {
   async function loadActiveContract(propertyId) {
     if (!propertyId) {
       setValues((currentValues) => ({ ...currentValues, contract_id: '', tenant_id: '' }))
+      setActiveContract(null)
       return
     }
 
@@ -66,6 +68,7 @@ function AgentRepairForm() {
 
     try {
       const contract = await getActiveContractByProperty(propertyId)
+      setActiveContract(contract)
       setValues((currentValues) => ({
         ...currentValues,
         contract_id: contract?.id || '',
@@ -85,6 +88,15 @@ function AgentRepairForm() {
     if (name === 'property_id') {
       loadActiveContract(value)
     }
+  }
+
+  function getContractLabel() {
+    if (checkingContract) return 'Buscando contrato...'
+    if (!values.contract_id) return 'Sin contrato activo'
+
+    const tenantName = activeContract?.tenant?.full_name
+    const tenantContact = activeContract?.tenant?.email || activeContract?.tenant?.phone
+    return ['Contrato activo', tenantName, tenantContact].filter(Boolean).join(' · ')
   }
 
   async function handleSubmit(event) {
@@ -113,7 +125,7 @@ function AgentRepairForm() {
   return (
     <DashboardLayout title="Nueva solicitud de arreglo" role="Inmobiliaria">
       <section className="panel dashboard-section">
-        {loading ? <p className="muted">Cargando propiedades...</p> : null}
+        {loading ? <p className="loading-feedback">Cargando propiedades...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}
         {success ? <p className="success-message">{success}</p> : null}
 
@@ -132,7 +144,7 @@ function AgentRepairForm() {
           <label>
             Contrato activo
             <input
-              value={checkingContract ? 'Buscando contrato...' : values.contract_id || 'Sin contrato activo'}
+              value={getContractLabel()}
               disabled
               readOnly
             />

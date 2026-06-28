@@ -1,27 +1,35 @@
 import { supabase } from './supabaseClient'
 
-const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-
-export async function findProfileByIdentifier(identifier) {
-  const value = identifier.trim()
+export async function searchAssignableProfiles(search) {
+  const value = search.trim()
 
   if (!value) {
-    throw new Error('Ingresá un ID de usuario o email.')
+    throw new Error('Ingresá un nombre o email para buscar.')
   }
 
-  const query = supabase
+  const { data, error } = await supabase
     .from('profiles')
     .select('id, full_name, email, phone, role')
-    .limit(1)
+    .in('role', ['inquilino', 'propietario', 'visitante'])
+    .or(`full_name.ilike.%${value}%,email.ilike.%${value}%`)
+    .order('full_name', { ascending: true })
+    .limit(8)
 
-  const { data, error } = uuidPattern.test(value)
-    ? await query.eq('id', value).maybeSingle()
-    : await query.ilike('email', value).maybeSingle()
+  if (error && error.message?.includes('email')) {
+    const { data: fallbackData, error: fallbackError } = await supabase
+      .from('profiles')
+      .select('id, full_name, phone, role')
+      .in('role', ['inquilino', 'propietario', 'visitante'])
+      .ilike('full_name', `%${value}%`)
+      .order('full_name', { ascending: true })
+      .limit(8)
+
+    if (fallbackError) throw fallbackError
+    return fallbackData || []
+  }
 
   if (error) throw error
-  if (!data) throw new Error('Usuario no encontrado.')
-
-  return data
+  return data || []
 }
 
 export async function getActiveContractByProperty(propertyId) {

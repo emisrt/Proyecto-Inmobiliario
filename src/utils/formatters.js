@@ -13,3 +13,15 @@ export function formatDate(value) {
 
   return new Intl.DateTimeFormat('es-AR').format(new Date(`${value}T00:00:00`))
 }
+
+export function formatDisplayText(value, fallback = 'No especificado') {
+  if (value === null || value === undefined || value === '') return fallback
+
+  return String(value).replaceAll('_', ' ')
+}
+
+export function formatProfileName(profile, fallback = 'Sin datos cargados') {
+  if (!profile) return fallback
+
+  return profile.full_name || profile.email || profile.phone || fallback
+}

@@ -46,6 +46,9 @@ function AgentRepairList() {
   }
 
   async function changeRepairStatus(repair, nextStatus) {
+    const shouldContinue = window.confirm('¿Confirmás el cambio de estado de esta solicitud?')
+    if (!shouldContinue) return
+
     setSavingId(repair.id)
     setError(null)
     setSuccess(null)
@@ -163,7 +166,7 @@ function AgentRepairList() {
             </select>
           </div>
         </div>
-        {loading ? <p className="muted">Cargando arreglos...</p> : null}
+        {loading ? <p className="loading-feedback">Cargando arreglos...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}
         {success ? <p className="success-message">{success}</p> : null}
         <SimpleTable columns={columns} rows={repairs} emptyMessage="No hay solicitudes de arreglo." />

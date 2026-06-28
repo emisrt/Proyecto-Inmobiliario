@@ -5,7 +5,7 @@ import SimpleTable from '../../components/SimpleTable'
 import StatusBadge from '../../components/StatusBadge'
 import { acceptApplication, listRepairApplications, rejectApplication } from '../../services/professionalService'
 import { getRepair } from '../../services/repairService'
-import { formatCurrency, formatDate } from '../../utils/formatters'
+import { formatCurrency, formatDate, formatDisplayText } from '../../utils/formatters'
 
 function RepairApplications() {
   const { id } = useParams()
@@ -39,6 +39,9 @@ function RepairApplications() {
   }, [loadData])
 
   async function handleAccept(application) {
+    const shouldContinue = window.confirm('¿Confirmás que querés aceptar esta postulación y asignar el trabajo al profesional?')
+    if (!shouldContinue) return
+
     setSaving(true)
     setError(null)
     setSuccess(null)
@@ -55,6 +58,9 @@ function RepairApplications() {
   }
 
   async function handleReject(applicationId) {
+    const shouldContinue = window.confirm('¿Confirmás que querés rechazar esta postulación?')
+    if (!shouldContinue) return
+
     setSaving(true)
     setError(null)
     setSuccess(null)
@@ -71,8 +77,10 @@ function RepairApplications() {
   }
 
   const columns = [
-    { header: 'Profesional', key: 'professional', render: (application) => application.professional?.full_name || application.professional_id },
-    { header: 'Especialidad', key: 'specialty', render: (application) => application.professional_profile?.specialty || '-' },
+    { header: 'Profesional', key: 'professional', render: (application) => application.professional?.full_name || 'Profesional sin datos visibles' },
+    { header: 'Contacto', key: 'contact', render: (application) => application.professional?.email || application.professional?.phone || 'No especificado' },
+    { header: 'Especialidad', key: 'specialty', render: (application) => formatDisplayText(application.professional_profile?.specialty) },
+    { header: 'Disponibilidad', key: 'availability', render: (application) => formatDisplayText(application.professional_profile?.availability) },
     { header: 'Mensaje', accessor: 'message' },
     { header: 'Presupuesto', key: 'estimated_budget', render: (application) => formatCurrency(application.estimated_budget) },
     { header: 'Fecha', key: 'created_at', render: (application) => formatDate(application.created_at?.slice(0, 10)) },
@@ -96,7 +104,7 @@ function RepairApplications() {
   return (
     <DashboardLayout title="Postulaciones del arreglo" role="Inmobiliaria">
       <section className="panel dashboard-section">
-        {loading ? <p className="muted">Cargando postulaciones...</p> : null}
+        {loading ? <p className="loading-feedback">Cargando postulaciones...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}
         {success ? <p className="success-message">{success}</p> : null}
         {repair ? (

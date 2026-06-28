@@ -102,7 +102,7 @@ function DashboardProfesional() {
 
   return (
     <DashboardLayout title="Panel de profesional externo" role="Profesional externo">
-      {loading ? <p className="muted">Cargando datos profesionales...</p> : null}
+      {loading ? <p className="loading-feedback">Cargando datos profesionales...</p> : null}
       {error ? <p className="error-message">{error}</p> : null}
 
       <section className="stats-grid">

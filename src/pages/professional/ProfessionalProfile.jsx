@@ -241,7 +241,7 @@ function ProfessionalProfile() {
         ) : null}
       </section>
 
-      {loading ? <p className="muted">Cargando perfil...</p> : null}
+      {loading ? <p className="loading-feedback">Cargando perfil...</p> : null}
       {error ? <p className="error-message">{error}</p> : null}
       {success ? <p className="success-message">{success}</p> : null}
 

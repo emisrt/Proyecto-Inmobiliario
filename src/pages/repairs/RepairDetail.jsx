@@ -16,6 +16,11 @@ function RepairDetail({ mode = 'tenant' }) {
   const [success, setSuccess] = useState(null)
   const isAgent = mode === 'agent'
 
+  function formatPerson(profile, emptyLabel) {
+    if (!profile) return emptyLabel
+    return [profile.full_name, profile.email || profile.phone].filter(Boolean).join(' · ') || emptyLabel
+  }
+
   const loadRepair = useCallback(async () => {
     setLoading(true)
     setError(null)
@@ -65,7 +70,7 @@ function RepairDetail({ mode = 'tenant' }) {
   return (
     <DashboardLayout title="Detalle de arreglo" role={isAgent ? 'Inmobiliaria' : 'Inquilino'}>
       <section className="panel dashboard-section">
-        {loading ? <p className="muted">Cargando solicitud...</p> : null}
+        {loading ? <p className="loading-feedback">Cargando solicitud...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}
         {success ? <p className="success-message">{success}</p> : null}
         {repair ? (
@@ -73,14 +78,14 @@ function RepairDetail({ mode = 'tenant' }) {
             <div>
               <p className="eyebrow">{repair.repair_type}</p>
               <h2>{repair.title}</h2>
-              <p>{repair.description || 'Sin descripcion.'}</p>
+              <p>{repair.description || 'Sin descripción cargada.'}</p>
               <dl className="detail-list">
-                <div><dt>Propiedad</dt><dd>{repair.properties?.title || '-'}</dd></div>
-                <div><dt>Inquilino</dt><dd>{repair.tenant?.full_name || repair.tenant_id}</dd></div>
+                <div><dt>Propiedad</dt><dd>{[repair.properties?.title, repair.properties?.address].filter(Boolean).join(' · ') || 'Sin propiedad asociada'}</dd></div>
+                <div><dt>Inquilino</dt><dd>{formatPerson(repair.tenant, 'Sin inquilino asociado')}</dd></div>
                 <div><dt>Creado</dt><dd>{formatDate(repair.created_at?.slice(0, 10))}</dd></div>
                 <div><dt>Prioridad</dt><dd><StatusBadge status={repair.priority} /></dd></div>
                 <div><dt>Estado</dt><dd><StatusBadge status={repair.status} /></dd></div>
-                <div><dt>Profesional asignado</dt><dd>{repair.assigned_professional?.full_name || '-'}</dd></div>
+                <div><dt>Profesional asignado</dt><dd>{formatPerson(repair.assigned_professional, 'Sin asignar')}</dd></div>
               </dl>
               {!isAgent ? <p className="muted">Observaciones: {repair.agent_notes || 'Sin observaciones de la inmobiliaria.'}</p> : null}
             </div>
@@ -92,7 +97,7 @@ function RepairDetail({ mode = 'tenant' }) {
                     <option value="pendiente">Pendiente</option>
                     <option value="publicado">Publicado</option>
                     <option value="en_proceso">En proceso</option>
-                    <option value="pendiente_confirmacion">Pendiente confirmacion</option>
+                    <option value="pendiente_confirmacion">Pendiente confirmación</option>
                     <option value="resuelto">Resuelto</option>
                     <option value="cancelado">Cancelado</option>
                   </select>

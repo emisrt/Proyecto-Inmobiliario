@@ -39,6 +39,7 @@ drop policy if exists "profiles_select_related" on public.profiles;
 drop policy if exists "properties_select_public_or_related" on public.properties;
 drop policy if exists "properties_insert_agent" on public.properties;
 drop policy if exists "properties_update_agent" on public.properties;
+drop policy if exists "properties_delete_agent" on public.properties;
 drop policy if exists "contracts_select_related" on public.contracts;
 drop policy if exists "contracts_insert_agent" on public.contracts;
 drop policy if exists "contracts_update_agent" on public.contracts;
@@ -108,6 +109,12 @@ for update
 to authenticated
 using (public.is_agent())
 with check (public.is_agent());
+
+create policy "properties_delete_agent"
+on public.properties
+for delete
+to authenticated
+using (public.current_user_role() = 'agente_inmobiliario');
 
 -- Contracts
 create policy "contracts_select_related"

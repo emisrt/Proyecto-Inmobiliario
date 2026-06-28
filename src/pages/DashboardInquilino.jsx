@@ -102,7 +102,7 @@ function DashboardInquilino() {
 
   return (
     <DashboardLayout title="Panel de Inquilino" role="Inquilino">
-      {loading ? <p className="muted">Cargando datos del alquiler...</p> : null}
+      {loading ? <p className="loading-feedback">Cargando datos del alquiler...</p> : null}
       {error ? <p className="error-message">{error}</p> : null}
 
       <section className="stats-grid">

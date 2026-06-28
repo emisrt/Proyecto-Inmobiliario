@@ -46,7 +46,7 @@ function ProfessionalApplications() {
   return (
     <DashboardLayout title="Mis postulaciones" role="Profesional externo">
       <section className="panel dashboard-section">
-        {loading ? <p className="muted">Cargando postulaciones...</p> : null}
+        {loading ? <p className="loading-feedback">Cargando postulaciones...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}
         <SimpleTable columns={columns} rows={applications} emptyMessage="Todavia no realizaste postulaciones." />
       </section>

@@ -47,6 +47,15 @@ function AvailableRepairDetail() {
 
   async function handleSubmit(event) {
     event.preventDefault()
+    if (!values.message.trim()) {
+      setError('Contanos brevemente cómo abordarías el trabajo.')
+      return
+    }
+    if (values.estimated_budget !== '' && Number(values.estimated_budget) < 0) {
+      setError('El presupuesto no puede ser negativo.')
+      return
+    }
+
     setSaving(true)
     setError(null)
     setSuccess(null)
@@ -65,7 +74,7 @@ function AvailableRepairDetail() {
   return (
     <DashboardLayout title="Detalle de arreglo disponible" role="Profesional externo">
       <section className="panel dashboard-section">
-        {loading ? <p className="muted">Cargando arreglo...</p> : null}
+        {loading ? <p className="loading-feedback">Cargando arreglo...</p> : null}
         {error ? <p className="error-message">{error}</p> : null}
         {success ? <p className="success-message">{success}</p> : null}
         {repair ? (
@@ -73,7 +82,7 @@ function AvailableRepairDetail() {
             <div>
               <p className="eyebrow">{repair.repair_type}</p>
               <h2>{repair.title}</h2>
-              <p>{repair.description || 'Sin descripcion.'}</p>
+              <p>{repair.description || 'Sin descripción cargada.'}</p>
               <dl className="detail-list">
                 <div><dt>Propiedad</dt><dd>{repair.properties?.title || '-'}</dd></div>
                 <div><dt>Direccion</dt><dd>{repair.properties?.address || '-'}</dd></div>
@@ -90,7 +99,7 @@ function AvailableRepairDetail() {
               ) : null}
               <label>
                 Mensaje
-                <textarea name="message" value={values.message} onChange={handleChange} rows="4" />
+                <textarea name="message" value={values.message} onChange={handleChange} rows="4" required />
               </label>
               <label>
                 Presupuesto estimado
